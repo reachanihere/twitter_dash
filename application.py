@@ -24,7 +24,6 @@ final_df = merge_data(grouped_total_confirmed, grouped_total_recovered, grouped_
 df_general = pd.read_csv('https://raw.githubusercontent.com/FabioPalliparambil98/covid-dataset/main/combined_generaltweets.csv')
 
 
-
 """
 It displays the Home Pages of the Visualisations.
 """
