@@ -32,6 +32,37 @@ def homepage():
                            sentiment_restriction=sentiment_restriction,
                            plot_general=plot_general)
 
+"""
+It displays the analysis of live tweets.
+"""
+
+
+@application.route('/live_tweets')
+def live_tweets():
+    return render_template("live_tweets.html")
+
+
+"""
+It displays the analysis of live tweets.
+"""
+
+
+@application.route('/contact', methods=["GET", "POST"])
+def contact_page():
+    if request.method == "GET":
+
+        return render_template('contact.html')
+
+    elif request.method == "POST":
+
+        name = request.form["txtName"]
+        email = request.form["txtEmail"]
+        phone = request.form["txtPhone"]
+        message = request.form["txtMsg"]
+        print(name, email, phone, message)
+
+        return render_template('test.html')
+
 
 
 

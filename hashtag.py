@@ -50,9 +50,49 @@ def create_plot(df_general_hashtag):
         # mode='markers'
     )]
 
+
+
     general_JSON = json.dumps(scatter_general, cls=plotly.utils.PlotlyJSONEncoder)
 
     return general_JSON
 
 
 df_hash_tag = hashtag(df_general)
+
+
+#
+# def create_plot(df_general_hashtag):
+#
+#
+#     scatter_general = [go.Bar(
+#         x=df_general_hashtag['Hashtag'],
+#         y=df_general_hashtag['Count'],
+#         marker_color='lightsalmon',
+#         text=df_general_hashtag['Count'],
+#         textposition='auto'
+#     )
+#     ]
+#     graph_general = go.Figure(scatter_general)
+#     graph_general.update_layout(
+#         title='General Frequency Tweet Count',
+#         xaxis_tickfont_size=14,
+#         yaxis=dict(
+#             title='Word Frequency Count',
+#             titlefont_size=16,
+#             tickfont_size=14,
+#         ),
+#         legend=dict(
+#             x=0,
+#             y=1.0,
+#             bgcolor='rgba(255, 255, 255, 0)',
+#             bordercolor='rgba(255, 255, 255, 0)'
+#         ),
+#         barmode='group',
+#         xaxis_tickangle=-45,
+#         bargap=0.15,  # gap between bars of adjacent location coordinates.
+#         bargroupgap=0.1  # gap between bars of the same location coordinate.
+#     )
+#
+#     general_JSON = json.dumps(scatter_general, cls=plotly.utils.PlotlyJSONEncoder)
+#
+#     return general_JSON
