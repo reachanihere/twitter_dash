@@ -2,17 +2,17 @@ from flask import Flask, render_template, request
 import plotly
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import re
 import json
 import pandas as pd
-from source import *
-from flask_mail import Mail
-import hashtag
+import nltk
 
 
 application = Flask(__name__)
 
 
 df_general = pd.read_csv('https://raw.githubusercontent.com/FabioPalliparambil98/covid-dataset/main/combined_generaltweets.csv')
+
 
 
 """
@@ -25,7 +25,7 @@ def homepage():
     sentiment_general = "positive"
     sentiment_vaccination = "positive"
     sentiment_restriction = "positive"
-    plot_general = create_plot(df_general)
+    plot_general = create_plot(df_hash_tag)
 
     return render_template("index.html",sentiment_general=sentiment_general,
                            sentiment_vaccination=sentiment_vaccination,
@@ -75,9 +75,10 @@ def create_plot(df_general_hashtag):
 
     general_JSON = json.dumps(scatter_general, cls=plotly.utils.PlotlyJSONEncoder)
 
-    return(general_JSON)
-    
+    return general_JSON
 
+
+df_hash_tag = hashtag(df_general)
 
 
 if __name__ == '__main__':
