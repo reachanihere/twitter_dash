@@ -136,6 +136,17 @@
                  </div>
              </div><!-- /.card -->
          </div><!-- /.col -->
+
+        <div class="col-lg-4" >
+             <div class="card" align = "center">
+                 <div id="plot_vaccination" >
+                     <script >
+                         var plot_vaccination = {{plot_vaccination | safe}};
+                         Plotly.plot('plot_vaccination',plot_vaccination,{});
+                     </script>
+                 </div>
+             </div><!-- /.card -->
+         </div><!-- /.col -->
 	</div><!-- /.row -->
 
 
