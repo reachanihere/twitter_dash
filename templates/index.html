@@ -119,7 +119,7 @@
              <div class="card" align = "center">
                  <div id="plot_general" >
                      <script >
-                         var plot_general = {{plot_general | safe}};
+                         var plot_general = {{plots.plot_general | safe}};
                          Plotly.plot('plot_general',plot_general,{});
                      </script>
                  </div>
@@ -130,7 +130,7 @@
              <div class="card" align = "center">
                  <div id="plot_restriction" >
                      <script >
-                         var plot_restriction = {{plot_restriction | safe}};
+                         var plot_restriction = {{plots.plot_restriction | safe}};
                          Plotly.plot('plot_restriction',plot_restriction,{});
                      </script>
                  </div>
@@ -141,17 +141,13 @@
              <div class="card" align = "center">
                  <div id="plot_vaccination" >
                      <script >
-                         var plot_vaccination = {{plot_vaccination | safe}};
+                         var plot_vaccination = {{plots.plot_vaccination | safe}};
                          Plotly.plot('plot_vaccination',plot_vaccination,{});
                      </script>
                  </div>
              </div><!-- /.card -->
          </div><!-- /.col -->
 	</div><!-- /.row -->
-
-
-
-
 
 </div><!-- /.container-fluid -->
 

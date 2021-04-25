@@ -21,7 +21,7 @@ total_confirmed, total_death, total_recovered, df_pop = load_data()
 
 final_df = merge_data(grouped_total_confirmed, grouped_total_recovered, grouped_total_death, df_pop)
 
-df_general = pd.read_csv('https://raw.githubusercontent.com/FabioPalliparambil98/covid-dataset/main/combined_generaltweets.csv')
+
 
 """
 It displays the Home Pages of the Visualisations.
@@ -37,14 +37,21 @@ def homepage():
     plot_general, plot_restriction, plot_vaccination = hashtag.create_plot(hashtag.df_general_hash_tag,
                                                                            hashtag.df_restriction_hash_tag,
                                                                            hashtag.df_vaccination_hash_tag)
+    plots = {'plot_general': plot_general, 'plot_restriction': plot_restriction, 'plot_vaccination': plot_vaccination}
 
     return render_template("index.html",
                            sentiment_general=sentiment_general,
                            sentiment_vaccination=sentiment_vaccination,
                            sentiment_restriction=sentiment_restriction,
-                           plot_general=plot_general,
-                           plot_restriction=plot_restriction,
-                           plot_vaccination=plot_vaccination)
+                           plots=plots)
+
+    # return render_template("index.html",
+    #                        sentiment_general=sentiment_general,
+    #                        sentiment_vaccination=sentiment_vaccination,
+    #                        sentiment_restriction=sentiment_restriction,
+    #                        plot_general=plot_general,
+    #                        plot_restriction=plot_restriction,
+    #                        plot_vaccination=plot_vaccination)
 
 
 """
