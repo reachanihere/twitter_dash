@@ -113,6 +113,20 @@
             </div><!-- /.card -->
         </div><!-- /.col -->
     </div><!-- /.row -->
+	
+	<div class="row">
+         <div class="col-lg-4" >
+             <div class="card" align = "center">
+                 <div id="bargraph" >
+                     <script >
+                         var graph = {{plot_general | safe}};
+                         Plotly.plot('bargraph',graph,{});
+                     </script>
+                 </div>
+             </div><!-- /.card -->
+         </div><!-- /.col -->
+	</div><!-- /.row -->
+		 
 
 
 
