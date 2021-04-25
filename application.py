@@ -61,7 +61,7 @@ def hashtag(df_general):
     return hashtag_general
 
 
-def create_plot(df_general_hashtag, hashtag_restriction, hashtag_vaccination):
+def create_plot(df_general_hashtag):
 
     # Create a trace
     scatter_general = [go.Scatter(
