@@ -75,7 +75,7 @@ def create_plot(df_general_hashtag, hashtag_restriction, hashtag_vaccination):
 
     general_JSON = json.dumps(scatter_general, cls=plotly.utils.PlotlyJSONEncoder)
 
-     return general_JSON
+    return(general_JSON)
     
 
 
