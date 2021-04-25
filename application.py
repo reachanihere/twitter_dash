@@ -5,7 +5,7 @@ from plotly.subplots import make_subplots
 import json
 import pandas as pd
 import hashtag
-from twitter_dash.source import preprocessed_data, load_data, merge_data
+from source import preprocessed_data, load_data, merge_data
 
 application = Flask(__name__)
 
