@@ -34,13 +34,16 @@ def homepage():
     sentiment_general = "positive"
     sentiment_vaccination = "positive"
     sentiment_restriction = "positive"
-    plot_general = hashtag.create_plot(hashtag.df_hash_tag)
+
+    plot_general, plot_restriction = hashtag.create_plot(hashtag.df_general_hash_tag,hashtag.df_restriction_hash_tag)
 
     return render_template("index.html",
                            sentiment_general=sentiment_general,
                            sentiment_vaccination=sentiment_vaccination,
                            sentiment_restriction=sentiment_restriction,
-                           plot_general=plot_general)
+                           plot_general=plot_general,
+                           plot_restriction=plot_restriction)
+
 
 """
 It displays the analysis of live tweets.

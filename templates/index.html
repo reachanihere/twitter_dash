@@ -117,10 +117,23 @@
 	<div class="row">
          <div class="col-lg-4" >
              <div class="card" align = "center">
-                 <div id="bargraph" >
+                 <div id="plot_general" >
                      <script >
-                         var graph = {{plot_general | safe}};
-                         Plotly.plot('bargraph',graph,{});
+                         var plot_general = {{plot_general | safe}};
+                         Plotly.plot('plot_general',plot_general,{});
+                     </script>
+                 </div>
+             </div><!-- /.card -->
+         </div><!-- /.col -->
+	</div><!-- /.row -->
+
+    <div class="row">
+         <div class="col-lg-4" >
+             <div class="card" align = "center">
+                 <div id="plot_restriction" >
+                     <script >
+                         var plot_restriction = {{plot_restriction | safe}};
+                         Plotly.plot('plot_restriction',plot_restriction,{});
                      </script>
                  </div>
              </div><!-- /.card -->
