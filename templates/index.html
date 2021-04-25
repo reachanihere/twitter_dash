@@ -113,24 +113,129 @@
             </div><!-- /.card -->
         </div><!-- /.col -->
     </div><!-- /.row -->
-	
-	<div class="row">
+
+    <div class="content-header"  align = "center">
+        <div class="container-fluid"  align = "center">
+            <div class="row mb-2" align = "center">
+                <div class="col-sm-6" align = "center" >
+                    <h1 class="m-0 text-dark" align = "center">COVID-19 Hashtag Visualisations</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div><!-- /.content-header -->
+
+     <div class="row">
          <div class="col-lg-4" >
              <div class="card" align = "center">
                  <div id="bargraph" >
                      <script >
-                         var graph = {{plot_general | safe}};
+                         var graph = {{plot1 | safe}};
                          Plotly.plot('bargraph',graph,{});
                      </script>
                  </div>
              </div><!-- /.card -->
          </div><!-- /.col -->
-	</div><!-- /.row -->
-		 
 
+         <div class="col-lg-4" >
+             <div class="card" align = "center">
+                 <div id="bargraph-1">
+                     <script>
+                         var graph = {{plot2 | safe}};
+                         Plotly.plot('bargraph-1',graph,{});
+                     </script>
+                 </div>
+             </div><!-- /.card -->
+         </div><!-- /.col -->
 
+         <div class="col-lg-4" >
+             <div class="card" align = "center">
+                 <div id="bargraph-2">
+                     <script>
+                         var graph = {{plot3 | safe}};
+                         Plotly.plot('bargraph-2',graph,{});
+                     </script>
+                 </div>
+             </div><!-- /.card -->
+         </div><!-- /.col -->
+     </div><!-- /.row -->
 
+     <div class="row">
+         <div class="col-lg-4" >
+            <div class="card" >
+                <div class="chart" id="scatter1">
+                    <script>
+                        var scatter1 = {{scatter1 | safe}};
+                        Plotly.plot('scatter1',scatter1,{});
+                    </script>
+                </div>
+            </div><!-- /.card -->
+         </div><!-- /.col -->
 
+         <div class="col-lg-4" >
+            <div class="card" >
+                <div class="chart" id="scatter2">
+                    <script>
+                        var scatter2 = {{scatter2 | safe}};
+                        Plotly.plot('scatter2',scatter2,{});
+                    </script>
+                </div>
+            </div><!-- /.card -->
+         </div><!-- /.col -->
+
+         <div class="col-lg-4" >
+            <div class="card" >
+                <div class="chart" id="scatter3">
+                    <script>
+                        var scatter3 = {{scatter3 | safe}};
+                        Plotly.plot('scatter3',scatter3,{});
+                    </script>
+                </div>
+            </div><!-- /.card -->
+         </div><!-- /.col -->
+     </div><!-- /.row -->
+
+    <div class="content-header"  align = "center">
+        <div class="container-fluid"  align = "center">
+            <div class="row mb-2">
+                <div class="col-sm-6" >
+                    <h1 class="m-0 text-dark">Covid-19 Multiple Dataset Visualisation</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10" align="center" >
+            <div class="chart" id="all">
+                <script>
+                    var all = {{all | safe}};
+                    Plotly.plot('all',all,{});
+                </script>
+            </div><!-- /.container-fluid -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+
+    <div class="row">
+        <div class="col-lg-10" align="center" >
+            <div class="chart" id="actual_scatter">
+                <script>
+                    var actual_scatter = {{actual_scatter | safe}};
+                    Plotly.plot('actual_scatter',actual_scatter,{});
+                </script>
+            </div><!-- /.container-fluid -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+
+    <div class="row">
+        <div class="col-lg-10" align="center" >
+            <div class="chart" id="pie">
+                <script>
+                    var pie = {{pie | safe}};
+                    Plotly.plot('pie',pie,{});
+                </script>
+            </div><!-- /.container-fluid -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
 </div><!-- /.container-fluid -->
 
 {% endblock my_content %}
