@@ -21,6 +21,24 @@ total_confirmed, total_death, total_recovered, df_pop = load_data()
 
 final_df = merge_data(grouped_total_confirmed, grouped_total_recovered, grouped_total_death, df_pop)
 
+df_general_filter = pd.read_csv('https://raw.githubusercontent.com/FabioPalliparambil98/cleaned-covid-dataset/main/general_covid.csv')
+df_restriction_filter = pd.read_csv('https://raw.githubusercontent.com/FabioPalliparambil98/cleaned-covid-dataset/main/covid_restriction.csv')
+df_vaccination_filter = pd.read_csv('https://raw.githubusercontent.com/FabioPalliparambil98/cleaned-covid-dataset/main/covid_vaccination.csv')
+
+
+df_general_filter_sentiment = df_general_filter.copy()
+df_restriction_filter_sentiment = df_restriction_filter.copy()
+df_vaccination_filter_sentiment = df_vaccination_filter.copy()
+
+
+df_general_filter['sentiment'].replace(0, 'negative', inplace=True)
+df_general_filter['sentiment'].replace(1, 'positive', inplace=True)
+
+df_restriction_filter['sentiment'].replace(0, 'negative', inplace=True)
+df_restriction_filter['sentiment'].replace(1, 'positive', inplace=True)
+
+df_vaccination_filter['sentiment'].replace(0, 'negative', inplace=True)
+df_vaccination_filter['sentiment'].replace(1, 'positive', inplace=True)
 
 
 """
@@ -56,6 +74,93 @@ def homepage():
     #                        plot_restriction=plot_restriction,
     #                        plot_vaccination=plot_vaccination)
 
+
+@application.route('/page_with_filters')
+@application.route('/page_with_filters_after_request', methods=["GET", "POST"])
+@application.route('/page_with_filters_after_sentiment', methods=["GET", "POST"])
+def page_with_filters():
+    days_in_weeks = df_general_filter['day_in_week'].unique()
+    sentiment = df_general_filter['sentiment'].unique()
+
+    if request.method == "GET":
+        day = "Monday"
+
+        sentiment_form = "negative"
+
+        day_mask = df_general_filter["day_in_week"] == day
+        sentiment_mask = df_general_filter["sentiment"] == sentiment_form
+        sentiment_mask1 = df_restriction_filter["sentiment"] == sentiment_form
+        sentiment_mask2 = df_vaccination_filter["sentiment"] == sentiment_form
+
+        #
+        weekday_plot = weekday_create_plot(df_general_filter[day_mask])
+        sentiment_plot = sentiment_retweets(df_general_filter[sentiment_mask])
+
+        retweet_count_visualisation = retweet_count(df_general_filter[sentiment_mask],
+                                                    df_restriction_filter[sentiment_mask1],
+                                                    df_vaccination_filter[sentiment_mask2])
+
+        return render_template("page_with_filters.html", days_in_weeks=days_in_weeks, sentiment=sentiment,
+                               weekday_plot=weekday_plot, sentiment_plot=sentiment_plot,
+                               retweet_count_visualisation=retweet_count_visualisation)
+
+
+def weekday_create_plot(df_1):
+    """ Scatter """
+
+    fig = go.Figure()
+
+    fig.add_trace(
+        go.Bar(
+            x=df_1['sentiment'],
+            y=df_1['retweetcount']
+        ))
+
+
+    day_graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return day_graphJSON
+def sentiment_retweets(df_1):
+    """ Scatter """
+
+    fig = go.Figure()
+
+    fig.add_trace(
+        go.Bar(
+            x=df_1['day_in_week'],
+            y=df_1['retweetcount']
+        ))
+
+
+    day_graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return day_graphJSON
+
+
+def retweet_count(df_general, df_restriction, df_vaccination):
+    fig = go.Figure()
+
+    fig.add_trace(
+        go.Bar(
+            x=df_general['day_in_week'],
+            y=df_general['retweetcount'],
+            name='Retweeted tweets in COVID-19 General'
+        ))
+
+    fig.add_trace(
+        go.Bar(
+            x=df_restriction['day_in_week'],
+            y=df_restriction['retweetcount'],
+            name='Retweeted tweets in COVID-19 Restriction'
+        ))
+    fig.add_trace(
+        go.Bar(
+            x=df_vaccination['day_in_week'],
+            y=df_vaccination['retweetcount'],
+            name='Retweeted tweets in COVID-19 Vaccination'
+        ))
+    retweet_count_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    return retweet_count_json
 
 """
 It displays the analysis of live tweets.
