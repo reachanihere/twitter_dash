@@ -149,6 +149,19 @@
          </div><!-- /.col -->
 	</div><!-- /.row -->
 
+    <div class="row">
+         <div class="col-lg-4" >
+             <div class="card" align = "center">
+                 <div id="pie_general" >
+                     <script >
+                         var pie_general = {{plots.pie_general | safe}};
+                         Plotly.plot('pie_general',pie_general,{});
+                     </script>
+                 </div>
+             </div><!-- /.card -->
+         </div><!-- /.col -->
+    </div>
+
 </div><!-- /.container-fluid -->
 
 {% endblock my_content %}

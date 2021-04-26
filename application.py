@@ -34,10 +34,13 @@ def homepage():
     sentiment_vaccination = "positive"
     sentiment_restriction = "positive"
 
-    plot_general, plot_restriction, plot_vaccination = hashtag.create_plot(hashtag.df_general_hash_tag,
+    plot_general, plot_restriction, plot_vaccination,pie_general = hashtag.create_plot(hashtag.df_general_hash_tag,
                                                                            hashtag.df_restriction_hash_tag,
                                                                            hashtag.df_vaccination_hash_tag)
-    plots = {'plot_general': plot_general, 'plot_restriction': plot_restriction, 'plot_vaccination': plot_vaccination}
+    plots = {'plot_general': plot_general,
+             'plot_restriction': plot_restriction,
+             'plot_vaccination': plot_vaccination,
+             'pie_general': pie_general}
 
     return render_template("index.html",
                            sentiment_general=sentiment_general,

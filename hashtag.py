@@ -162,9 +162,16 @@ def create_plot(df_general_hashtag, df_restriction_hashtag, df_vaccination_hasht
         bargroupgap=0.1  # gap between bars of the same location coordinate.
     )
 
+    Pie = go.Figure(data=[go.Pie(labels=df_general_hashtag['Hashtag'],
+                                 values=df_general_hashtag['Count'],
+                                 textinfo='label+percent',
+                                 insidetextorientation='radial',
+                                 hole=.2)])
+
     general_JSON = json.dumps(scatter_general, cls=plotly.utils.PlotlyJSONEncoder)
     restriction_JSON = json.dumps(scatter_restriction, cls=plotly.utils.PlotlyJSONEncoder)
     vaccination_JSON = json.dumps(scatter_vaccination, cls=plotly.utils.PlotlyJSONEncoder)
+    Pie_json = json.dumps(Pie, cls=plotly.utils.PlotlyJSONEncoder)
 
-    return general_JSON, restriction_JSON, vaccination_JSON
+    return general_JSON, restriction_JSON, vaccination_JSON,Pie_json
 
