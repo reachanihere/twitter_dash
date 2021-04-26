@@ -48,9 +48,10 @@ It displays the Home Pages of the Visualisations.
 
 @application.route('/')
 def homepage():
-    sentiment_general = "positive"
-    sentiment_vaccination = "positive"
-    sentiment_restriction = "positive"
+
+    sentiment_general = sentiment_data(df_general_filter_sentiment)
+    sentiment_vaccination = sentiment_data(df_restriction_filter_sentiment)
+    sentiment_restriction = sentiment_data(df_vaccination_filter_sentiment)
 
     plot_general, plot_restriction, plot_vaccination,pie_general = hashtag.create_plot(hashtag.df_general_hash_tag,
                                                                            hashtag.df_restriction_hash_tag,
@@ -266,6 +267,22 @@ def covidcases():
     return render_template('covidcases.html', context=context, total_all_confirmed=total_all_confirmed,
                            total_all_recovered=total_all_recovered,
                            total_all_deaths=total_all_deaths)
+
+
+
+"""
+It get the sentimental value
+"""
+
+
+def sentiment_data(df):
+    df_sentiment = df['sentiment'].value_counts()
+    negative = df_sentiment.loc[0]
+    positive = df_sentiment.loc[1]
+    if negative > positive:
+        return "negative"
+    else:
+        return "positive"
 
 
 if __name__ == '__main__':
