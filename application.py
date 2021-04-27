@@ -53,12 +53,17 @@ def homepage():
     sentiment_vaccination = sentiment_data(df_restriction_filter_sentiment)
     sentiment_restriction = sentiment_data(df_vaccination_filter_sentiment)
 
-    plot_general, plot_restriction, plot_vaccination,pie_general = hashtag.create_plot(hashtag.df_general_hash_tag,
+    plot_general, plot_restriction, plot_vaccination, line_general, line_restriction,line_vaccination, all_line_scatters,scatter_circles,pie_general = hashtag.create_plot(hashtag.df_general_hash_tag,
                                                                            hashtag.df_restriction_hash_tag,
                                                                            hashtag.df_vaccination_hash_tag)
     plots = {'plot_general': plot_general,
              'plot_restriction': plot_restriction,
              'plot_vaccination': plot_vaccination,
+             'line_general': line_general,
+             'line_restriction': line_restriction,
+             'line_vaccination': line_vaccination,
+             'all_line_scatters': all_line_scatters,
+             'scatter_circles': scatter_circles,
              'pie_general': pie_general}
 
     return render_template("index.html",
@@ -66,14 +71,6 @@ def homepage():
                            sentiment_vaccination=sentiment_vaccination,
                            sentiment_restriction=sentiment_restriction,
                            plots=plots)
-
-    # return render_template("index.html",
-    #                        sentiment_general=sentiment_general,
-    #                        sentiment_vaccination=sentiment_vaccination,
-    #                        sentiment_restriction=sentiment_restriction,
-    #                        plot_general=plot_general,
-    #                        plot_restriction=plot_restriction,
-    #                        plot_vaccination=plot_vaccination)
 
 
 @application.route('/page_with_filters')
