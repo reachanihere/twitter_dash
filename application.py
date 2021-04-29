@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from flask_sqlalchemy  import SQLAlchemy
 import plotly
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
