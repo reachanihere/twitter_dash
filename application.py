@@ -21,9 +21,10 @@ total_confirmed, total_death, total_recovered, df_pop = load_data()
 
 final_df = merge_data(grouped_total_confirmed, grouped_total_recovered, grouped_total_death, df_pop)
 
-df_general_filter = pd.read_csv('https://raw.githubusercontent.com/FabioPalliparambil98/COVID-19_General_Tweets/main/cleaned_general_tweet.csv')
-df_restriction_filter = pd.read_csv('https://raw.githubusercontent.com/FabioPalliparambil98/COVID-19_Restriction_Tweets/main/cleaned_restriction_tweet.csv')
-df_vaccination_filter = pd.read_csv('https://raw.githubusercontent.com/FabioPalliparambil98/COVID-19_Vaccination_Tweets/main/cleaned_vaccination_tweet.csv')
+df_general_filter = pd.read_csv('https://raw.githubusercontent.com/FabioPalliparambil98/cleaned-covid-dataset/main/general_covid.csv')
+df_restriction_filter = pd.read_csv('https://raw.githubusercontent.com/FabioPalliparambil98/cleaned-covid-dataset/main/covid_restriction.csv')
+df_vaccination_filter = pd.read_csv('https://raw.githubusercontent.com/FabioPalliparambil98/cleaned-covid-dataset/main/covid_vaccination.csv')
+
 
 df_general_filter_sentiment = df_general_filter.copy()
 df_restriction_filter_sentiment = df_restriction_filter.copy()

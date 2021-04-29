@@ -8,11 +8,11 @@ import plotly
 import re
 
 df_general = pd.read_csv(
-    'https://raw.githubusercontent.com/FabioPalliparambil98/COVID-19_General_Tweets/main/combined_generaltweets.csv')
+    'https://raw.githubusercontent.com/FabioPalliparambil98/covid-dataset/main/combined_generaltweets.csv')
 df_restriction = pd.read_csv(
-    'https://raw.githubusercontent.com/FabioPalliparambil98/COVID-19_Restriction_Tweets/main/combined_restrictiontweets.csv')
+    'https://raw.githubusercontent.com/FabioPalliparambil98/covid-dataset/main/combined_restrictiontweets.csv')
 df_vaccination = pd.read_csv(
-    'https://raw.githubusercontent.com/FabioPalliparambil98/COVID-19_Vaccination_Tweets/main/combined_vaccinationtweets.csv')
+    'https://raw.githubusercontent.com/FabioPalliparambil98/covid-dataset/main/combined_vaccinationtweets.csv')
 
 """
 Function for collecting all the Hashtag
