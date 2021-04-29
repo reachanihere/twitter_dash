@@ -1,7 +1,6 @@
 import os
 
 import settings
-import mysql.connector
 import pandas as pd
 import psycopg2
 import time
