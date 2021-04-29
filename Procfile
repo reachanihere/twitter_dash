@@ -1,1 +1,1 @@
-web: sh setup.sh && streamlit run --server.port $PORT application.py
+web: gunicorn application:application --preload
