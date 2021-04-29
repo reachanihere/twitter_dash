@@ -287,5 +287,5 @@ def sentiment_data(df):
 
 
 if __name__ == '__main__':
-    application.run()
+    application.run(environ.get())
 
