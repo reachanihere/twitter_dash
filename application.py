@@ -1,7 +1,4 @@
-from os import environ
-
 from flask import Flask, render_template, request
-from flask_sqlalchemy  import SQLAlchemy
 import plotly
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -9,7 +6,6 @@ import json
 import pandas as pd
 import hashtag
 from source import preprocessed_data, load_data, merge_data
-# import livetweet_graphs
 
 application = Flask(__name__)
 
@@ -171,8 +167,6 @@ It displays the analysis of live tweets.
 @application.route('/live_tweets')
 def live_tweets():
     return render_template("live_tweets.html")
-    # line_graph, bar_graph, choropleth_map = livetweet_graphs()
-    # return render_template("live_tweets.html", bar_graph=bar_graph, choropleth_map=choropleth_map,line_graph=line_graph)
 
 
 """
@@ -288,5 +282,4 @@ def sentiment_data(df):
 
 
 if __name__ == '__main__':
-    application.run(environ.get())
-
+    application.run()
