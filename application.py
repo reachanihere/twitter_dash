@@ -168,8 +168,8 @@ It displays the analysis of live tweets.
 
 @application.route('/live_tweets')
 def live_tweets():
-    line_graph, choropleth_map = live_tweets_graphs.live_tweet()
-    return render_template("live_tweets.html",  choropleth_map=choropleth_map,line_graph=line_graph)
+    line_graph, bar_graph, choropleth_map = live_tweets_graphs.live_tweet()
+    return render_template("live_tweets.html", bar_graph=bar_graph, choropleth_map=choropleth_map,line_graph=line_graph)
 
 
 """
