@@ -89,32 +89,32 @@ def live_tweet():
         Bar
         Chart
         '''
-        content = ' '.join(df["text"])
-        content = re.sub(r"http\S+", "", content)
-        content = content.replace('RT ', ' ').replace('&amp;', 'and')
-        content = re.sub('[^A-Za-z0-9]+', ' ', content)
-        content = content.lower()
-
-        tokenized_word = word_tokenize(content)
-        stop_words = set(stopwords.words("english"))
-        filtered_sent = []
-        for w in tokenized_word:
-            if w not in stop_words:
-                filtered_sent.append(w)
-        fdist = FreqDist(filtered_sent)
-        fd = pd.DataFrame(fdist.most_common(10), columns=["Word", "Frequency"]).drop([0]).reindex()
-
-        # Plot Bar chart
-        bar = go.Figure()
-
-        bar.add_trace(
-            go.Bar(x=fd["Word"],
-                   y=fd["Frequency"],
-                   name="Freq Dist"))
-
-        bar.update_traces(marker_color='rgb(59, 89, 152)', marker_line_color='rgb(8,48,107)', \
-                          marker_line_width=0.5, opacity=0.7)
-        bar.update_layout(title_text="Top 9 appeared words in live tweets", title_font_size=20)
+        # content = ' '.join(df["text"])
+        # content = re.sub(r"http\S+", "", content)
+        # content = content.replace('RT ', ' ').replace('&amp;', 'and')
+        # content = re.sub('[^A-Za-z0-9]+', ' ', content)
+        # content = content.lower()
+        #
+        # tokenized_word = word_tokenize(content)
+        # stop_words = set(stopwords.words("english"))
+        # filtered_sent = []
+        # for w in tokenized_word:
+        #     if w not in stop_words:
+        #         filtered_sent.append(w)
+        # fdist = FreqDist(filtered_sent)
+        # fd = pd.DataFrame(fdist.most_common(10), columns=["Word", "Frequency"]).drop([0]).reindex()
+        #
+        # # Plot Bar chart
+        # bar = go.Figure()
+        #
+        # bar.add_trace(
+        #     go.Bar(x=fd["Word"],
+        #            y=fd["Frequency"],
+        #            name="Freq Dist"))
+        #
+        # bar.update_traces(marker_color='rgb(59, 89, 152)', marker_line_color='rgb(8,48,107)', \
+        #                   marker_line_width=0.5, opacity=0.7)
+        # bar.update_layout(title_text="Top 9 appeared words in live tweets", title_font_size=20)
 
         '''
         Plot
@@ -176,8 +176,8 @@ def live_tweet():
 
 
         line_chart_JSON = json.dumps(line_chart, cls=plotly.utils.PlotlyJSONEncoder)
-        bar_chart_JSON = json.dumps(bar, cls=plotly.utils.PlotlyJSONEncoder)
+        # bar_chart_JSON = json.dumps(bar, cls=plotly.utils.PlotlyJSONEncoder)
         choropleth_map_JSON = json.dumps(choropleth_map, cls=plotly.utils.PlotlyJSONEncoder)
-        return line_chart_JSON, bar_chart_JSON, choropleth_map_JSON
-
+        # return line_chart_JSON, bar_chart_JSON, choropleth_map_JSON
+        return line_chart_JSON, choropleth_map_JSON
 
