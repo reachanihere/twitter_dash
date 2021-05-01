@@ -5,6 +5,7 @@ from plotly.subplots import make_subplots
 import json
 import pandas as pd
 import hashtag
+import live_tweets_graphs
 from source import preprocessed_data, load_data, merge_data
 
 application = Flask(__name__)
@@ -167,7 +168,8 @@ It displays the analysis of live tweets.
 
 @application.route('/live_tweets')
 def live_tweets():
-    return render_template("live_tweets.html")
+    line_graph, bar_graph, choropleth_map = live_tweets_graphs.live_tweet()
+    return render_template("live_tweets.html", bar_graph=bar_graph, choropleth_map=choropleth_map,line_graph=line_graph)
 
 
 """
