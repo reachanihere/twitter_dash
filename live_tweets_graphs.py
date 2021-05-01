@@ -40,14 +40,16 @@ This complex plot shows the latest Twitter data within 20 mins and will automati
 def live_tweet():
     while True:
 
-        # Loading data from Heroku PostgreSQL
+
         DATABASE_URL = os.environ['DATABASE_URL']
         connection = psycopg2.connect(DATABASE_URL, sslmode='require')
-
         # Load data from MySQL
         timenow = (datetime.datetime.utcnow() - datetime.timedelta(hours=0, minutes=20)).strftime('%Y-%m-%d %H:%M:%S')
         query = "SELECT id_str, text, created_at, polarity, user_location FROM {} WHERE created_at >= '{}' " \
             .format(settings.table_name, timenow)
+        df = pd.read_sql(query, con=connection)
+
+
         df = pd.read_sql(query, con=connection)
         # UTC for date time at default
         df['created_at'] = pd.to_datetime(df['created_at'])
@@ -87,32 +89,32 @@ def live_tweet():
         Bar
         Chart
         '''
-        content = ' '.join(df["text"])
-        content = re.sub(r"http\S+", "", content)
-        content = content.replace('RT ', ' ').replace('&amp;', 'and')
-        content = re.sub('[^A-Za-z0-9]+', ' ', content)
-        content = content.lower()
-
-        tokenized_word = word_tokenize(content)
-        stop_words = set(stopwords.words("english"))
-        filtered_sent = []
-        for w in tokenized_word:
-            if w not in stop_words:
-                filtered_sent.append(w)
-        fdist = FreqDist(filtered_sent)
-        fd = pd.DataFrame(fdist.most_common(10), columns=["Word", "Frequency"]).drop([0]).reindex()
-
-        # Plot Bar chart
-        bar = go.Figure()
-
-        bar.add_trace(
-            go.Bar(x=fd["Word"],
-                   y=fd["Frequency"],
-                   name="Freq Dist"))
-
-        bar.update_traces(marker_color='rgb(59, 89, 152)', marker_line_color='rgb(8,48,107)', \
-                          marker_line_width=0.5, opacity=0.7)
-        bar.update_layout(title_text="Top 9 appeared words in live tweets", title_font_size=20)
+        # content = ' '.join(df["text"])
+        # content = re.sub(r"http\S+", "", content)
+        # content = content.replace('RT ', ' ').replace('&amp;', 'and')
+        # content = re.sub('[^A-Za-z0-9]+', ' ', content)
+        # content = content.lower()
+        #
+        # tokenized_word = word_tokenize(content)
+        # stop_words = set(stopwords.words("english"))
+        # filtered_sent = []
+        # for w in tokenized_word:
+        #     if w not in stop_words:
+        #         filtered_sent.append(w)
+        # fdist = FreqDist(filtered_sent)
+        # fd = pd.DataFrame(fdist.most_common(10), columns=["Word", "Frequency"]).drop([0]).reindex()
+        #
+        # # Plot Bar chart
+        # bar = go.Figure()
+        #
+        # bar.add_trace(
+        #     go.Bar(x=fd["Word"],
+        #            y=fd["Frequency"],
+        #            name="Freq Dist"))
+        #
+        # bar.update_traces(marker_color='rgb(59, 89, 152)', marker_line_color='rgb(8,48,107)', \
+        #                   marker_line_width=0.5, opacity=0.7)
+        # bar.update_layout(title_text="Top 9 appeared words in live tweets", title_font_size=20)
 
         '''
         Plot
