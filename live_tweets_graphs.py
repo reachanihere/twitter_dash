@@ -176,8 +176,9 @@ def live_tweet():
 
 
         line_chart_JSON = json.dumps(line_chart, cls=plotly.utils.PlotlyJSONEncoder)
-        bar_chart_JSON = json.dumps(bar, cls=plotly.utils.PlotlyJSONEncoder)
+        # bar_chart_JSON = json.dumps(bar, cls=plotly.utils.PlotlyJSONEncoder)
         choropleth_map_JSON = json.dumps(choropleth_map, cls=plotly.utils.PlotlyJSONEncoder)
-        return line_chart_JSON, bar_chart_JSON, choropleth_map_JSON
+        return line_chart_JSON,  choropleth_map_JSON
+        # return line_chart_JSON, bar_chart_JSON, choropleth_map_JSON
 
 
