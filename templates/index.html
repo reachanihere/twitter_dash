@@ -17,6 +17,23 @@
 
 <div class="container-fluid">
 
+
+            <div class="row mb-2">
+                <div class="col-sm-6" >
+                    <form  action="/" method="POST">
+                        <select name="day"  method="POST" class="form-select">
+                             <option selected>Select a Day </option>
+                            {% for day in days_in_weeks %}
+                              <option value={{ day }}>{{ day }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <input type="Submit" value="Submit">
+                    </form>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+
+
      <div class="row">
          <div class="col-lg-2" >
             <div class="card" align = "left">
@@ -222,6 +239,54 @@
              </div><!-- /.card -->
          </div><!-- /.col -->
     </div>
+
+    <div class="row">
+         <div class="col-lg-4" >
+             <div class="card" align = "center">
+                 <div id="user_general" >
+                     <script >
+                         var user_general = {{plots.user_general | safe}};
+                         Plotly.plot('user_general',user_general,{});
+                     </script>
+                 </div>
+             </div><!-- /.card -->
+         </div><!-- /.col -->
+
+         <div class="col-lg-4" >
+{#             <div class="card" align = "center">#}
+                 <div id="user_vaccination" >
+                     <script >
+                         var user_vaccination = {{plots.user_vaccination | safe}};
+                         Plotly.plot('user_vaccination',user_vaccination,{});
+                     </script>
+                 </div>
+{#             </div><!-- /.card -->#}
+         </div><!-- /.col -->
+
+        <div class="col-lg-4" >
+             <div class="card" align = "center">
+                 <div id="user_restriction" >
+                     <script >
+                         var user_restriction = {{plots.user_restriction | safe}};
+                         Plotly.plot('user_restriction',user_restriction,{});
+                     </script>
+                 </div>
+             </div><!-- /.card -->
+         </div><!-- /.col -->
+    </div>
+
+    <div class="row">
+        <div id="general-table" >
+            <script >
+                var table = {{plots.table | safe}};
+                Plotly.plot('general-table',table,{});
+            </script>
+        </div>
+    </div>
+
+
+
+
 
 </div><!-- /.container-fluid -->
 
