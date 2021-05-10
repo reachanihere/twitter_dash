@@ -20,104 +20,30 @@
 
 <div class="container-fluid">
 
-            <div class="content-header"  align = "center">
-            <div class="container-fluid"  align = "center">
-                <div class="row mb-2">
-                    <div class="col-sm-6" >
-                        <h1 class="m-0 text-dark">Sentiment in Different Days  Visualisation</h1>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
-     </div>
+    <form action="/page_with_filters" method="POST">
 
+        <label for="start">Enter the start date:</label>
+        <input type="date" id="start" name="start_date" min="2021-03-12" max="2021-04-02">
 
-        <div class="row">
-            <div class="col-lg-2" >
+        <label for="end">Enter the end date:</label>
+        <input type="date" id="end" name="end_date" min="2021-03-12" max="2021-04-02">
 
+        <input type="submit">
 
-            <form  action="/page_with_filters_after_request" method="POST">
-                <select name="day_in_week"  method="POST" class="form-select">
-                     <option selected>Select Day in the Week </option>
-                    {% for day in days_in_weeks %}
-                      <option value={{ day }}>{{ day }}</option>
-                    {% endfor %}
-                </select>
-
-        </div>
-
-    </div>
-    <br>
+    </form>
 
     <div class="row">
-         <div class="col-lg-9" >
-
-                    <div class="chart" id="bargraph-4">
-                        <script>
-                            var graphs = {{weekday_plot | safe}};
-                            Plotly.plot('bargraph-4',graphs,{});
-                        </script>
-                    </div>
-
+        <div class="col-lg-11" align = "center">
+            <div class="card" >
+                <div id="line_graph" >
+                    <script >
+                        var line_graph = {{line_graph | safe}};
+                        Plotly.plot('line_graph',line_graph,{});
+                    </script>
+                </div><!-- /.card -->
+            </div><!-- /.col -->
         </div>
     </div>
-
-    <div class="content-header"  align = "center">
-            <div class="container-fluid"  align = "center">
-                <div class="row mb-2">
-                    <div class="col-sm-6" >
-                        <h1 class="m-0 text-dark">Covid-19 Retweet Visualisation</h1>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
-     </div>
-
-    <div class="col-lg-2" >
-        <div class="row">
-
-                <select name="sentiment"  method="POST" class="form-select-1">
-                     <option selected>Select Day in the Week </option>
-                    {% for sentiment in sentiment %}
-                      <option value={{ sentiment }}>{{ sentiment }}</option>
-                    {% endfor %}
-                </select>
-                <input type="Submit" value="Submit">
-            </form>
-    </div>
-    </div>
-
-    <div class="row">
-         <div class="col-lg-9" >
-
-                    <div class="chart" id="bargraph">
-                        <script>
-                            var graphs = {{sentiment_plot | safe}};
-                            Plotly.plot('bargraph',graphs,{});
-                        </script>
-                    </div>
-
-        </div>
-    </div>
-
-    <div class="content-header"  align = "center">
-            <div class="container-fluid"  align = "center">
-                <div class="row mb-2">
-                    <div class="col-sm-6" >
-                        <h1 class="m-0 text-dark">Covid-19 Multiple Dataset Visualisation</h1>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
-     </div>
-
-     <div class="row" align="center">
-        <div class="col-lg-9"  >
-            <div class="chart" id="retweet_count_visualisation">
-                <script>
-                    var retweet_count_visualisation = {{retweet_count_visualisation | safe}};
-                    Plotly.plot('retweet_count_visualisation',retweet_count_visualisation,{});
-                </script>
-            </div>
-        </div>
-   </div>
 
 </div>
 

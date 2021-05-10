@@ -8,6 +8,7 @@ import hashtag
 import live_tweets_graphs
 # from word_cloud import *
 import user_sentiments
+import page_with_filter
 from source import preprocessed_data, load_data, merge_data
 
 application = Flask(__name__)
@@ -186,9 +187,8 @@ def homepage():
                                plots=plots, days_in_weeks=days_in_weeks)
 
 
-@application.route('/page_with_filters')
-@application.route('/page_with_filters_after_request', methods=["GET", "POST"])
-@application.route('/page_with_filters_after_sentiment', methods=["GET", "POST"])
+
+@application.route('/page_with_filters', methods=["GET", "POST"])
 def page_with_filters():
     days_in_weeks = df_general_filter['day_in_week'].unique()
     sentiment = df_general_filter['sentiment'].unique()
@@ -198,27 +198,32 @@ def page_with_filters():
                                   df_vaccination_filter
                                   ])
 
+    union_cleaned_df["tweetcreatedts"] = pd.to_datetime(union_cleaned_df["tweetcreatedts"])
+    union_cleaned_df = union_cleaned_df.sort_values(by="tweetcreatedts")
+
+    union_cleaned_df['date_format'] = [d.date() for d in union_cleaned_df['tweetcreatedts']]
+    union_cleaned_df["date_format"] = pd.to_datetime(union_cleaned_df["date_format"])
+
     if request.method == "GET":
-        day = "Monday"
 
-        sentiment_form = "negative"
+        return render_template("page_with_filters.html")
 
-        day_mask = df_general_filter["day_in_week"] == day
-        sentiment_mask = df_general_filter["sentiment"] == sentiment_form
-        sentiment_mask1 = df_restriction_filter["sentiment"] == sentiment_form
-        sentiment_mask2 = df_vaccination_filter["sentiment"] == sentiment_form
+    else:
+        # getting the values from the HTML form.
+        start_date = request.form['start_date']
+        end_date = request.form['end_date']
 
-        #
-        weekday_plot = weekday_create_plot(df_general_filter[day_mask])
-        sentiment_plot = sentiment_retweets(df_general_filter[sentiment_mask])
+        start = union_cleaned_df[union_cleaned_df.date_format == pd.Timestamp(start_date)]
+        end = union_cleaned_df[union_cleaned_df.date_format == pd.Timestamp(end_date)]
+        df_with_date = pd.concat([start, end])
 
-        retweet_count_visualisation = retweet_count(df_general_filter[sentiment_mask],
-                                                    df_restriction_filter[sentiment_mask1],
-                                                    df_vaccination_filter[sentiment_mask2])
 
-        return render_template("page_with_filters.html", days_in_weeks=days_in_weeks, sentiment=sentiment,
-                               weekday_plot=weekday_plot, sentiment_plot=sentiment_plot,
-                               retweet_count_visualisation=retweet_count_visualisation)
+        # writing
+        line_chart = page_with_filter.graph_with_filter(df_with_date)
+
+
+        return render_template("page_with_filters.html", line_graph=line_chart)
+
 
 
 def weekday_create_plot(df_1):
