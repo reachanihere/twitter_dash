@@ -10,6 +10,7 @@ import live_tweets_graphs
 import user_sentiments
 import page_with_filter
 from source import preprocessed_data, load_data, merge_data
+import sentiment_plots
 
 application = Flask(__name__)
 
@@ -73,7 +74,7 @@ def homepage():
         sentiment_restriction = sentiment_data(df_vaccination_filter_sentiment)
 
         # Creating plots using hashtags.
-        plot_general, plot_restriction, plot_vaccination, line_general, line_restriction, line_vaccination, all_line_scatters, scatter_circles, pie_general = hashtag.create_plot(
+        line_general, line_restriction, line_vaccination, all_line_scatters, scatter_circles, pie_general = hashtag.create_plot(
             hashtag.df_general_hash_tag,
             hashtag.df_restriction_hash_tag,
             hashtag.df_vaccination_hash_tag)
@@ -85,14 +86,12 @@ def homepage():
         df_users_general = user_sentiments.userdataframe(df_general_filter)
         df_users_vaccination = user_sentiments.userdataframe(df_vaccination_filter)
         df_users_restriction = user_sentiments.userdataframe(df_restriction_filter)
+
         user_general, user_vaccination, user_restriction = user_sentiments.users_plot(df_users_general,
                                                                                       df_users_vaccination,
                                                                                       df_users_restriction)
 
-        plots = {'plot_general': plot_general,
-                 'plot_restriction': plot_restriction,
-                 'plot_vaccination': plot_vaccination,
-                 'line_general': line_general,
+        plots = {'line_general': line_general,
                  'line_restriction': line_restriction,
                  'line_vaccination': line_vaccination,
                  'all_line_scatters': all_line_scatters,
@@ -103,7 +102,7 @@ def homepage():
                  'user_restriction': user_restriction,
                  'table': table}
 
-        import sentiment_plots
+
 
         df_general_sentiment = sentiment_plots.sentiment_dataframe(df_general_filter)
         df_restriction_sentiment = sentiment_plots.sentiment_dataframe(df_restriction_filter)
@@ -114,7 +113,7 @@ def homepage():
             df_vaccination_sentiment,
             df_restriction_sentiment)
 
-        sentiment_plots = {'pie_general_sentiment': pie_general_sentiment,
+        sentiment_pie = {'pie_general_sentiment': pie_general_sentiment,
                            'pie_vaccination_sentiment': pie_vaccination_sentiment,
                            'pie_restriction_sentiment': pie_restriction_sentiment}
 
@@ -124,18 +123,11 @@ def homepage():
                                sentiment_restriction=sentiment_restriction,
                                plots=plots,
                                days_in_weeks=days_in_weeks,
-                               sentiment_plots=sentiment_plots)
+                               sentiment_pie=sentiment_pie)
     else:
 
         day = request.form["day"]
 
-        # day_week_result = df_general_filter_sentiment[df_general_filter_sentiment['day_in_week'] == day]
-
-        # print('This is the result of filters', day_week_result)
-
-        # create_wordcloud(df_general_filter, df_restriction_filter, df_vaccination_filter)
-
-        #
         df_general_sentiment = df_general_filter_sentiment[df_general_filter_sentiment['day_in_week'] == day]
         df_vaccination_sentiment = df_vaccination_filter_sentiment[
             df_vaccination_filter_sentiment['day_in_week'] == day]
@@ -165,7 +157,7 @@ def homepage():
         """
 
         # Plotting all the necessary plots according to users input
-        plot_general, plot_restriction, plot_vaccination, line_general, line_restriction, line_vaccination, all_line_scatters, scatter_circles, pie_general = hashtag.create_plot(
+        line_general, line_restriction, line_vaccination, all_line_scatters, scatter_circles, pie_general = hashtag.create_plot(
             df_general_hash_tag,
             df_restriction_hash_tag,
             df_vaccination_hash_tag)
@@ -182,10 +174,7 @@ def homepage():
                                                                                       df_users_vaccination,
                                                                                       df_users_restriction)
 
-        plots = {'plot_general': plot_general,
-                 'plot_restriction': plot_restriction,
-                 'plot_vaccination': plot_vaccination,
-                 'line_general': line_general,
+        plots = {'line_general': line_general,
                  'line_restriction': line_restriction,
                  'line_vaccination': line_vaccination,
                  'all_line_scatters': all_line_scatters,
@@ -196,7 +185,7 @@ def homepage():
                  'user_restriction': user_restriction,
                  'table': table}
 
-        import sentiment_plots
+
 
         df_general_sentiment = sentiment_plots.sentiment_dataframe(
             df_general_filter[df_general_filter['day_in_week'] == day])
@@ -210,7 +199,7 @@ def homepage():
             df_vaccination_sentiment,
             df_restriction_sentiment)
 
-        sentiment_plots = {'pie_general_sentiment': pie_general_sentiment,
+        sentiment_pie = {'pie_general_sentiment': pie_general_sentiment,
                            'pie_vaccination_sentiment': pie_vaccination_sentiment,
                            'pie_restriction_sentiment': pie_restriction_sentiment}
 
@@ -219,24 +208,22 @@ def homepage():
                                sentiment_vaccination=sentiment_vaccination,
                                sentiment_restriction=sentiment_restriction,
                                plots=plots, days_in_weeks=days_in_weeks,
-                               sentiment_plots=sentiment_plots)
+                               sentiment_pie=sentiment_pie)
 
 
 @application.route('/page_with_filters', methods=["GET", "POST"])
 def page_with_filters():
-    days_in_weeks = df_general_filter['day_in_week'].unique()
-    sentiment = df_general_filter['sentiment'].unique()
 
     union_cleaned_df = pd.concat([df_general_filter,
                                   df_restriction_filter,
                                   df_vaccination_filter
                                   ])
-
     union_cleaned_df["tweetcreatedts"] = pd.to_datetime(union_cleaned_df["tweetcreatedts"])
     union_cleaned_df = union_cleaned_df.sort_values(by="tweetcreatedts")
-
     union_cleaned_df['date_format'] = [d.date() for d in union_cleaned_df['tweetcreatedts']]
     union_cleaned_df["date_format"] = pd.to_datetime(union_cleaned_df["date_format"])
+
+
 
     if request.method == "GET":
         start_date = '2021-03-12'
@@ -252,16 +239,16 @@ def page_with_filters():
         df_users_positive = user_sentiments.userdataframe(df_with_date[df_with_date['sentiment'] == 'positive'])
         user_bar_chart_positive = page_with_filter.create_graph_user_positive(df_users_positive)
 
-        import sentiment_plots
-
         df_single_sentiment = sentiment_plots.sentiment_dataframe(df_with_date)
-
         pie_sentiment = sentiment_plots.single_sentiment_pie(df_single_sentiment)
+
+        table_date = create_table(df_with_date)
 
         return render_template("page_with_filters.html",
                                user_bar_chart_negative=user_bar_chart_negative,
                                user_bar_chart_positive=user_bar_chart_positive,
-                               pie_sentiment=pie_sentiment)
+                               pie_sentiment=pie_sentiment,
+                               table_date=table_date)
 
     else:
         # getting the values from the HTML form.
@@ -278,16 +265,16 @@ def page_with_filters():
         df_users_positive = user_sentiments.userdataframe(df_with_date[df_with_date['sentiment'] == 'positive'])
         user_bar_chart_positive = page_with_filter.create_graph_user_positive(df_users_positive)
 
-        import sentiment_plots
-
         df_single_sentiment = sentiment_plots.sentiment_dataframe(df_with_date)
-
         pie_sentiment = sentiment_plots.single_sentiment_pie(df_single_sentiment)
+
+        table_date = create_table(df_with_date)
 
         return render_template("page_with_filters.html",
                                user_bar_chart_negative=user_bar_chart_negative,
                                user_bar_chart_positive=user_bar_chart_positive,
-                               pie_sentiment=pie_sentiment)
+                               pie_sentiment=pie_sentiment,
+                               table_date=table_date)
 
 
 def weekday_create_plot(df_1):
@@ -477,17 +464,20 @@ create_table
 
 def create_table(df):
     df = df.head(20)
+
     table = go.Figure([go.Table(
         header=dict(
             values=["username", "acctdesc", "location", "following", "followers", "total<br>tweets",
                     "user<br>createdts", "tweet<br>created", "retweet<br>count", "text", "hashtags", "Month", "Hour",
                     "day_in_week", "day", "sentiment"],
             font=dict(size=10),
-            align="left"
+            align="left",
+            fill_color='paleturquoise'
         ),
         cells=dict(
             values=[df[k].tolist() for k in df.columns[1:]],
-            align="left"
+            align="left",
+            fill_color='lavender',
         )
     )
     ])
@@ -498,6 +488,8 @@ def create_table(df):
         showlegend=False,
         title_text="Covid-19 Data Collected Sample",
     )
+
+
     tableJSON = json.dumps(table, cls=plotly.utils.PlotlyJSONEncoder)
 
     return tableJSON

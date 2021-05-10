@@ -87,7 +87,18 @@
         </div>
     </div>
 
-
+        <div class="row">
+        <div class="col-lg-12" >
+             <div class="card" align = "center">
+                <div id="general-table" >
+                    <script >
+                        var table = {{table_date | safe}};
+                        Plotly.plot('general-table',table,{});
+                    </script>
+                </div>
+             </div>
+        </div>
+    </div>
 
 </div>
 

@@ -117,127 +117,127 @@ df_vaccination_hash_tag = hastag_dataframe(df_vaccination)
 
 
 def create_plot(df_general_hashtag, df_restriction_hashtag, df_vaccination_hashtag):
-    scatter_general = [go.Bar(
+
+
+    # scatter_general = go.Figure()
+    #
+    # scatter_general.add_trace(go.Bar(
+    #     x=df_general_hashtag['Hashtag'],
+    #     y=df_general_hashtag['Count'],
+    #     marker_color='rgb(76, 76, 214)',
+    #     opacity=0.8))
+    #
+    # scatter_general.update_layout(title_text="The top hashtags in general COVID-19 dataset", title_font_size=17)
+    #
+    # # Set x-axis title
+    # scatter_general.update_xaxes(tickangle=45)
+    # scatter_general.update_xaxes(title_text="Hashtag")
+    #
+    #
+    # # Set y-axes titles
+    # scatter_general.update_yaxes(title_text="Number of Hashtag tweeted")
+    #
+    # """ restriction bar"""
+    # scatter_restriction = go.Figure()
+    #
+    # scatter_restriction.add_trace(go.Bar(
+    #     x=df_restriction_hashtag['Hashtag'],
+    #     y=df_restriction_hashtag['Count'],
+    #     marker_color='rgb(255, 92, 51)',
+    #     opacity=0.8))
+    #
+    # scatter_restriction.update_layout(title_text="The top hashtags in COVID-19 restriction dataset", title_font_size=17)
+    #
+    # # Set x-axis title
+    # scatter_restriction.update_xaxes(tickangle=45)
+    # scatter_restriction.update_xaxes(title_text="Hashtag")
+    #
+    # # Set y-axes titles
+    # scatter_restriction.update_yaxes(title_text="Number of Hashtag tweeted")
+    #
+    # """ vaccination bar"""
+    #
+    # scatter_vaccination = go.Figure()
+    #
+    # scatter_vaccination.add_trace(go.Bar(
+    #     x=df_vaccination_hashtag['Hashtag'],
+    #     y=df_vaccination_hashtag['Count'],
+    #     marker_color='rgb(93, 213, 93)',
+    #     opacity=0.8))
+    #
+    # scatter_vaccination.update_layout(title_text="The top hashtags in COVID-19 vaccination dataset", title_font_size=17)
+    #
+    # # Set x-axis title
+    # scatter_vaccination.update_xaxes(tickangle=45)
+    # scatter_vaccination.update_xaxes(title_text="Hashtag")
+    #
+    # # Set y-axes titles
+    # scatter_vaccination.update_yaxes(title_text="Number of Hashtag tweeted")
+
+
+
+
+
+
+
+    """ Scatter """
+
+    scatter_line_genreal = go.Figure()
+
+    scatter_line_genreal.add_trace(go.Scatter(
         x=df_general_hashtag['Hashtag'],
         y=df_general_hashtag['Count'],
-        marker_color='lightsalmon',
-        text=df_general_hashtag['Count'],
-        textposition='auto'
-    )
-    ]
-    graph_general = go.Figure(scatter_general)
-    graph_general.update_layout(
-        title='General Frequency Tweet Count',
-        xaxis_tickfont_size=14,
-        yaxis=dict(
-            title='Word Frequency Count',
-            titlefont_size=16,
-            tickfont_size=14,
-        ),
-        legend=dict(
-            x=0,
-            y=1.0,
-            bgcolor='rgba(255, 255, 255, 0)',
-            bordercolor='rgba(255, 255, 255, 0)'
-        ),
-        barmode='group',
-        xaxis_tickangle=-45,
-        bargap=0.15,  # gap between bars of adjacent location coordinates.
-        bargroupgap=0.1  # gap between bars of the same location coordinate.
-    )
+        marker_color='rgb(76, 76, 214)',
+        opacity=0.8))
 
-    scatter_restriction = [go.Bar(
+    scatter_line_genreal.update_layout(title_text="The top hashtags in general COVID-19 dataset", title_font_size=17)
+
+    # Set x-axis title
+    scatter_line_genreal.update_xaxes(tickangle=45)
+    scatter_line_genreal.update_xaxes(title_text="Hashtag")
+
+    # Set y-axes titles
+    scatter_line_genreal.update_yaxes(title_text="Number of Hashtag tweeted")
+
+    """ Scatter """
+
+    scatter_line_restriction = go.Figure()
+
+    scatter_line_restriction.add_trace(go.Scatter(
         x=df_restriction_hashtag['Hashtag'],
         y=df_restriction_hashtag['Count'],
-        marker_color='lightsalmon',
-        text=df_restriction_hashtag['Count'],
-        textposition='auto'
-    )
-    ]
-    graph_restriction = go.Figure(scatter_restriction)
-    graph_restriction.update_layout(
-        title='restriction Frequency Tweet Count',
-        xaxis_tickfont_size=14,
-        yaxis=dict(
-            title='Word Frequency Count',
-            titlefont_size=16,
-            tickfont_size=14,
-        ),
-        legend=dict(
-            x=0,
-            y=1.0,
-            bgcolor='rgba(255, 255, 255, 0)',
-            bordercolor='rgba(255, 255, 255, 0)'
-        ),
-        barmode='group',
-        xaxis_tickangle=-45,
-        bargap=0.15,  # gap between bars of adjacent location coordinates.
-        bargroupgap=0.1  # gap between bars of the same location coordinate.
-    )
+        marker_color='rgb(255, 92, 51)',
+        opacity=0.8))
 
-    scatter_vaccination = [go.Bar(
+    scatter_line_restriction.update_layout(title_text="The top hashtags in COVID-19 restriction dataset", title_font_size=17)
+
+    # Set x-axis title
+    scatter_line_restriction.update_xaxes(tickangle=45)
+    scatter_line_restriction.update_xaxes(title_text="Hashtag")
+
+    # Set y-axes titles
+    scatter_line_restriction.update_yaxes(title_text="Number of Hashtag tweeted")
+
+
+    """ Scatter """
+
+    scatter_line_vaccination = go.Figure()
+
+    scatter_line_vaccination.add_trace(go.Scatter(
         x=df_vaccination_hashtag['Hashtag'],
         y=df_vaccination_hashtag['Count'],
-        marker_color='lightsalmon',
-        text=df_vaccination_hashtag['Count'],
-        textposition='auto'
-    )
-    ]
-    graph_vaccination = go.Figure(scatter_vaccination)
-    graph_vaccination.update_layout(
-        title='General Frequency Tweet Count',
-        xaxis_tickfont_size=14,
-        yaxis=dict(
-            title='Word Frequency Count',
-            titlefont_size=16,
-            tickfont_size=14,
-        ),
-        legend=dict(
-            x=0,
-            y=1.0,
-            bgcolor='rgba(255, 255, 255, 0)',
-            bordercolor='rgba(255, 255, 255, 0)'
-        ),
-        barmode='group',
-        xaxis_tickangle=-45,
-        bargap=0.15,  # gap between bars of adjacent location coordinates.
-        bargroupgap=0.1  # gap between bars of the same location coordinate.
-    )
-    """ Scatter """
+        marker_color='rgb(93, 213, 93)',
+        opacity=0.8))
 
-    # Create a trace
-    scatter_line_genreal = [go.Scatter(
-        x=df_general_hashtag['Hashtag'],
-        y=df_general_hashtag['Count'],
-        mode='lines+markers',
-        name='lines+markers',
-        marker_color='rgba(255, 182, 193, .9)'
-        # mode='markers'
-    )]
+    scatter_line_vaccination.update_layout(title_text="The top hashtags in COVID-19 vaccination dataset", title_font_size=17)
 
-    """ Scatter """
+    # Set x-axis title
+    scatter_line_vaccination.update_xaxes(tickangle=45)
+    scatter_line_vaccination.update_xaxes(title_text="Hashtag")
 
-    # Create a trace
-    scatter_line_restriction = [go.Scatter(
-        x=df_restriction_hashtag['Hashtag'],
-        y=df_restriction_hashtag['Count'],
-        mode='lines+markers',
-        name='lines+markers',
-        marker_color='rgba(255, 182, 193, .9)'
-        # mode='markers'
-    )]
+    # Set y-axes titles
+    scatter_line_vaccination.update_yaxes(title_text="Number of Hashtag tweeted")
 
-    """ Scatter """
-
-    # Create a trace
-    scatter_line_vaccination = [go.Scatter(
-        x=df_vaccination_hashtag['Hashtag'],
-        y=df_vaccination_hashtag['Count'],
-        mode='lines+markers',
-        name='lines+markers',
-        marker_color='rgba(255, 182, 193, .9)'
-        # mode='markers'
-    )]
 
     """ all toghether"""
     all_scatter_line = go.Figure()
@@ -262,6 +262,17 @@ def create_plot(df_general_hashtag, df_restriction_hashtag, df_vaccination_hasht
             name='COVID-19 Vaccination Hashtag'
         ))
 
+    all_scatter_line.update_layout(title_text="Hashtag Comparison Between 3 different dataset",
+                                           title_font_size=20)
+
+    # Set x-axis title
+    all_scatter_line.update_xaxes(tickangle=45)
+    all_scatter_line.update_xaxes(title_text="Hashtag")
+
+    # Set y-axes titles
+    all_scatter_line.update_yaxes(title_text="Number of Hashtag tweeted")
+
+
     Scatters = go.Figure(data=go.Scatter(
         x=df_general_hashtag['Hashtag'],
         y=df_general_hashtag['Count'],
@@ -280,9 +291,9 @@ def create_plot(df_general_hashtag, df_restriction_hashtag, df_vaccination_hasht
                                  insidetextorientation='radial',
                                  hole=.2)])
 
-    general_JSON = json.dumps(scatter_general, cls=plotly.utils.PlotlyJSONEncoder)
-    restriction_JSON = json.dumps(scatter_restriction, cls=plotly.utils.PlotlyJSONEncoder)
-    vaccination_JSON = json.dumps(scatter_vaccination, cls=plotly.utils.PlotlyJSONEncoder)
+    # general_JSON = json.dumps(scatter_general, cls=plotly.utils.PlotlyJSONEncoder)
+    # restriction_JSON = json.dumps(scatter_restriction, cls=plotly.utils.PlotlyJSONEncoder)
+    # vaccination_JSON = json.dumps(scatter_vaccination, cls=plotly.utils.PlotlyJSONEncoder)
     line_genreal_JSON = json.dumps(scatter_line_genreal, cls=plotly.utils.PlotlyJSONEncoder)
     line_restriction_JSON = json.dumps(scatter_line_restriction, cls=plotly.utils.PlotlyJSONEncoder)
     line_vaccination_JSON = json.dumps(scatter_line_vaccination, cls=plotly.utils.PlotlyJSONEncoder)
@@ -290,4 +301,6 @@ def create_plot(df_general_hashtag, df_restriction_hashtag, df_vaccination_hasht
     Scatters_JSON = json.dumps(Scatters, cls=plotly.utils.PlotlyJSONEncoder)
     Pie_json = json.dumps(Pie, cls=plotly.utils.PlotlyJSONEncoder)
 
-    return general_JSON, restriction_JSON, vaccination_JSON, line_genreal_JSON, line_restriction_JSON, line_vaccination_JSON, all_scatter_lineJSON, Scatters_JSON, Pie_json
+    return line_genreal_JSON, line_restriction_JSON, line_vaccination_JSON, all_scatter_lineJSON, Scatters_JSON, Pie_json
+
+

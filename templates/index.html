@@ -100,7 +100,7 @@
             <div class="card" align = "center">
                 <div id="pie_general_sentiment" >
                     <script >
-                    var pie_general_sentiment = {{sentiment_plots.pie_general_sentiment | safe}};
+                    var pie_general_sentiment = {{sentiment_pie.pie_general_sentiment | safe}};
                     Plotly.plot('pie_general_sentiment',pie_general_sentiment,{});
                     </script>
                 </div>
@@ -111,7 +111,7 @@
          <div class="card" align = "center">
              <div id="pie_vaccination_sentiment" >
                  <script >
-                     var pie_vaccination_sentiment = {{sentiment_plots.pie_vaccination_sentiment | safe}};
+                     var pie_vaccination_sentiment = {{sentiment_pie.pie_vaccination_sentiment | safe}};
                      Plotly.plot('pie_vaccination_sentiment',pie_vaccination_sentiment,{});
                  </script>
              </div>
@@ -122,7 +122,7 @@
          <div class="card" align = "center">
              <div id="pie_restriction_sentiment" >
                  <script >
-                     var pie_restriction_sentiment = {{sentiment_plots.pie_restriction_sentiment | safe}};
+                     var pie_restriction_sentiment = {{sentiment_pie.pie_restriction_sentiment | safe}};
                      Plotly.plot('pie_restriction_sentiment',pie_restriction_sentiment,{});
                  </script>
              </div>
@@ -178,38 +178,40 @@
     </div><!-- /.row -->
 
 	<div class="row">
-         <div class="col-lg-4" >
-             <div class="card" align = "center">
-                 <div id="plot_general" >
-                     <script >
-                         var plot_general = {{plots.plot_general | safe}};
-                         Plotly.plot('plot_general',plot_general,{});
-                     </script>
-                 </div>
-             </div><!-- /.card -->
-         </div><!-- /.col -->
-
-         <div class="col-lg-4" >
-             <div class="card" align = "center">
-                 <div id="plot_restriction" >
-                     <script >
-                         var plot_restriction = {{plots.plot_restriction | safe}};
-                         Plotly.plot('plot_restriction',plot_restriction,{});
-                     </script>
-                 </div>
-             </div><!-- /.card -->
-         </div><!-- /.col -->
-
-        <div class="col-lg-4" >
-             <div class="card" align = "center">
-                 <div id="plot_vaccination" >
-                     <script >
-                         var plot_vaccination = {{plots.plot_vaccination | safe}};
-                         Plotly.plot('plot_vaccination',plot_vaccination,{});
-                     </script>
-                 </div>
-             </div><!-- /.card -->
-         </div><!-- /.col -->
+{#         <div class="col-lg-4" >#}
+{#             <div class="card" align = "center">#}
+{#                 <div id="plot_general" >#}
+{#                     <script >#}
+{#                         var plot_general = {{plots.plot_general | safe}};#}
+{#                         Plotly.plot('plot_general',plot_general,{});#}
+{#                     </script>#}
+{#                 </div>#}
+{#             </div><!-- /.card -->#}
+{#         </div><!-- /.col -->#}
+{##}
+{##}
+{##}
+{#        <div class="col-lg-4" >#}
+{#             <div class="card" align = "center">#}
+{#                 <div id="plot_vaccination" >#}
+{#                     <script >#}
+{#                         var plot_vaccination = {{plots.plot_vaccination | safe}};#}
+{#                         Plotly.plot('plot_vaccination',plot_vaccination,{});#}
+{#                     </script>#}
+{#                 </div>#}
+{#             </div><!-- /.card -->#}
+{#         </div><!-- /.col -->#}
+{##}
+{#         <div class="col-lg-4" >#}
+{#             <div class="card" align = "center">#}
+{#                 <div id="plot_restriction" >#}
+{#                     <script >#}
+{#                         var plot_restriction = {{plots.plot_restriction | safe}};#}
+{#                         Plotly.plot('plot_restriction',plot_restriction,{});#}
+{#                     </script>#}
+{#                 </div>#}
+{#             </div><!-- /.card -->#}
+{#         </div><!-- /.col -->#}
 
         <div class="col-lg-4" >
              <div class="card" align = "center">
@@ -260,33 +262,9 @@
          </div><!-- /.col -->
     </div>
 
-    <div class="row">
-         <div class="col-lg-4" >
-             <div class="card" align = "center">
-                 <div id="scatter_circles" >
-                     <script >
-                         var scatter_circles = {{plots.scatter_circles | safe}};
-                         Plotly.plot('scatter_circles',scatter_circles,{});
-                     </script>
-                 </div>
-             </div><!-- /.card -->
-         </div><!-- /.col -->
-    </div>
 
     <div class="row">
-         <div class="col-lg-4" >
-             <div class="card" align = "center">
-                 <div id="pie_general" >
-                     <script >
-                         var pie_general = {{plots.pie_general | safe}};
-                         Plotly.plot('pie_general',pie_general,{});
-                     </script>
-                 </div>
-             </div><!-- /.card -->
-         </div><!-- /.col -->
-    </div>
 
-    <div class="row">
          <div class="col-lg-4" >
              <div class="card" align = "center">
                  <div id="user_general" >
@@ -299,14 +277,14 @@
          </div><!-- /.col -->
 
          <div class="col-lg-4" >
-{#             <div class="card" align = "center">#}
+             <div class="card" align = "center">
                  <div id="user_vaccination" >
                      <script >
                          var user_vaccination = {{plots.user_vaccination | safe}};
                          Plotly.plot('user_vaccination',user_vaccination,{});
                      </script>
                  </div>
-{#             </div><!-- /.card -->#}
+             </div><!-- /.card -->
          </div><!-- /.col -->
 
         <div class="col-lg-4" >
@@ -322,11 +300,15 @@
     </div>
 
     <div class="row">
-        <div id="general-table" >
-            <script >
-                var table = {{plots.table | safe}};
-                Plotly.plot('general-table',table,{});
-            </script>
+        <div class="col-lg-12" >
+             <div class="card" align = "center">
+                <div id="general-table" >
+                    <script >
+                        var table = {{plots.table | safe}};
+                        Plotly.plot('general-table',table,{});
+                    </script>
+                </div>
+             </div>
         </div>
     </div>
 
