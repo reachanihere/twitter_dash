@@ -33,6 +33,20 @@
     </form>
 
 
+    <div class="row">
+        <div class="col-lg-11" >
+            <div class="card" align = "center">
+                <div id="pie_sentiment" >
+                    <script >
+                        var pie_sentiment = {{pie_sentiment | safe}};
+                        Plotly.plot('pie_sentiment',pie_sentiment,{});
+                    </script>
+                </div>
+            </div><!-- /.card -->
+        </div><!-- /.col -->
+    </div>
+
+
 
 
     <div class="row">
@@ -59,7 +73,21 @@
                 </div><!-- /.card -->
             </div><!-- /.col -->
         </div>
+        <div class ="row">
+            <div class="col-lg-6" align = "center">
+                <div class="card" >
+                    <div id="pie_test" >
+                        <script >
+                            var pie_test = {{pie_test | safe}};
+                            Plotly.plot('pie_test',pie_test,{});
+                        </script>
+                    </div><!-- /.card -->
+                </div><!-- /.col -->
+            </div>
+        </div>
     </div>
+
+
 
 </div>
 

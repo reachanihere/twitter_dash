@@ -92,6 +92,52 @@
      </div><!-- /.row -->
 
 
+
+
+
+    <div class="row">
+        <div class="col-lg-4" >
+            <div class="card" align = "center">
+                <div id="pie_general_sentiment" >
+                    <script >
+                    var pie_general_sentiment = {{sentiment_plots.pie_general_sentiment | safe}};
+                    Plotly.plot('pie_general_sentiment',pie_general_sentiment,{});
+                    </script>
+                </div>
+            </div><!-- /.card -->
+        </div><!-- /.col -->
+
+     <div class="col-lg-4" >
+         <div class="card" align = "center">
+             <div id="pie_vaccination_sentiment" >
+                 <script >
+                     var pie_vaccination_sentiment = {{sentiment_plots.pie_vaccination_sentiment | safe}};
+                     Plotly.plot('pie_vaccination_sentiment',pie_vaccination_sentiment,{});
+                 </script>
+             </div>
+         </div><!-- /.card -->
+     </div><!-- /.col -->
+
+    <div class="col-lg-4" >
+         <div class="card" align = "center">
+             <div id="pie_restriction_sentiment" >
+                 <script >
+                     var pie_restriction_sentiment = {{sentiment_plots.pie_restriction_sentiment | safe}};
+                     Plotly.plot('pie_restriction_sentiment',pie_restriction_sentiment,{});
+                 </script>
+             </div>
+         </div><!-- /.card -->
+     </div><!-- /.col -->
+
+    </div>
+
+
+
+
+
+
+
+
     <div class="content-header"  align = "center">
         <div class="container-fluid"  align = "center">
             <div class="row mb-2">
@@ -283,10 +329,6 @@
             </script>
         </div>
     </div>
-
-
-
-
 
 </div><!-- /.container-fluid -->
 

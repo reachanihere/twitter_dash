@@ -103,15 +103,31 @@ def homepage():
                  'user_restriction': user_restriction,
                  'table': table}
 
+        import sentiment_plots
+
+        df_general_sentiment = sentiment_plots.sentiment_dataframe(df_general_filter)
+        df_restriction_sentiment = sentiment_plots.sentiment_dataframe(df_restriction_filter)
+        df_vaccination_sentiment = sentiment_plots.sentiment_dataframe(df_vaccination_filter)
+
+        pie_general_sentiment, pie_vaccination_sentiment, pie_restriction_sentiment = sentiment_plots.sentiment_pie(
+            df_general_sentiment,
+            df_vaccination_sentiment,
+            df_restriction_sentiment)
+
+        sentiment_plots = {'pie_general_sentiment': pie_general_sentiment,
+                           'pie_vaccination_sentiment': pie_vaccination_sentiment,
+                           'pie_restriction_sentiment': pie_restriction_sentiment}
+
         return render_template("index.html",
                                sentiment_general=sentiment_general,
                                sentiment_vaccination=sentiment_vaccination,
                                sentiment_restriction=sentiment_restriction,
-                               plots=plots, days_in_weeks=days_in_weeks)
+                               plots=plots,
+                               days_in_weeks=days_in_weeks,
+                               sentiment_plots=sentiment_plots)
     else:
 
         day = request.form["day"]
-
 
         # day_week_result = df_general_filter_sentiment[df_general_filter_sentiment['day_in_week'] == day]
 
@@ -180,12 +196,30 @@ def homepage():
                  'user_restriction': user_restriction,
                  'table': table}
 
+        import sentiment_plots
+
+        df_general_sentiment = sentiment_plots.sentiment_dataframe(
+            df_general_filter[df_general_filter['day_in_week'] == day])
+        df_restriction_sentiment = sentiment_plots.sentiment_dataframe(
+            df_restriction_filter[df_restriction_filter['day_in_week'] == day])
+        df_vaccination_sentiment = sentiment_plots.sentiment_dataframe(
+            df_vaccination_filter[df_vaccination_filter['day_in_week'] == day])
+
+        pie_general_sentiment, pie_vaccination_sentiment, pie_restriction_sentiment = sentiment_plots.sentiment_pie(
+            df_general_sentiment,
+            df_vaccination_sentiment,
+            df_restriction_sentiment)
+
+        sentiment_plots = {'pie_general_sentiment': pie_general_sentiment,
+                           'pie_vaccination_sentiment': pie_vaccination_sentiment,
+                           'pie_restriction_sentiment': pie_restriction_sentiment}
+
         return render_template("index.html",
                                sentiment_general=sentiment_general,
                                sentiment_vaccination=sentiment_vaccination,
                                sentiment_restriction=sentiment_restriction,
-                               plots=plots, days_in_weeks=days_in_weeks)
-
+                               plots=plots, days_in_weeks=days_in_weeks,
+                               sentiment_plots=sentiment_plots)
 
 
 @application.route('/page_with_filters', methods=["GET", "POST"])
@@ -205,8 +239,29 @@ def page_with_filters():
     union_cleaned_df["date_format"] = pd.to_datetime(union_cleaned_df["date_format"])
 
     if request.method == "GET":
+        start_date = '2021-03-12'
+        end_date = '2021-03-20'
 
-        return render_template("page_with_filters.html")
+        start = union_cleaned_df[union_cleaned_df.date_format == pd.Timestamp(start_date)]
+        end = union_cleaned_df[union_cleaned_df.date_format == pd.Timestamp(end_date)]
+        df_with_date = pd.concat([start, end])
+
+        df_users_negative = user_sentiments.userdataframe(df_with_date[df_with_date['sentiment'] == 'negative'])
+        user_bar_chart_negative = page_with_filter.create_graph_user_negative(df_users_negative)
+
+        df_users_positive = user_sentiments.userdataframe(df_with_date[df_with_date['sentiment'] == 'positive'])
+        user_bar_chart_positive = page_with_filter.create_graph_user_positive(df_users_positive)
+
+        import sentiment_plots
+
+        df_single_sentiment = sentiment_plots.sentiment_dataframe(df_with_date)
+
+        pie_sentiment = sentiment_plots.single_sentiment_pie(df_single_sentiment)
+
+        return render_template("page_with_filters.html",
+                               user_bar_chart_negative=user_bar_chart_negative,
+                               user_bar_chart_positive=user_bar_chart_positive,
+                               pie_sentiment=pie_sentiment)
 
     else:
         # getting the values from the HTML form.
@@ -217,19 +272,22 @@ def page_with_filters():
         end = union_cleaned_df[union_cleaned_df.date_format == pd.Timestamp(end_date)]
         df_with_date = pd.concat([start, end])
 
-
-
         df_users_negative = user_sentiments.userdataframe(df_with_date[df_with_date['sentiment'] == 'negative'])
         user_bar_chart_negative = page_with_filter.create_graph_user_negative(df_users_negative)
 
         df_users_positive = user_sentiments.userdataframe(df_with_date[df_with_date['sentiment'] == 'positive'])
         user_bar_chart_positive = page_with_filter.create_graph_user_positive(df_users_positive)
 
+        import sentiment_plots
+
+        df_single_sentiment = sentiment_plots.sentiment_dataframe(df_with_date)
+
+        pie_sentiment = sentiment_plots.single_sentiment_pie(df_single_sentiment)
 
         return render_template("page_with_filters.html",
                                user_bar_chart_negative=user_bar_chart_negative,
-                               user_bar_chart_positive=user_bar_chart_positive)
-
+                               user_bar_chart_positive=user_bar_chart_positive,
+                               pie_sentiment=pie_sentiment)
 
 
 def weekday_create_plot(df_1):
@@ -298,7 +356,7 @@ It displays the analysis of live tweets.
 @application.route('/live_tweets')
 def live_tweets():
     line_graph, choropleth_map = live_tweets_graphs.live_tweet()
-    return render_template("live_tweets.html", choropleth_map=choropleth_map,line_graph=line_graph)
+    return render_template("live_tweets.html", choropleth_map=choropleth_map, line_graph=line_graph)
 
 
 """
