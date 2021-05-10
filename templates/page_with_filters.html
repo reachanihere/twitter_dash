@@ -45,6 +45,33 @@
         </div>
     </div>
 
+
+    <div class="row">
+        <div class="col-lg-6" align = "center">
+            <div class="card" >
+                <div id="user_bar_chart_negative" >
+                    <script >
+                        var user_bar_chart_negative = {{user_bar_chart_negative | safe}};
+                        Plotly.plot('user_bar_chart_negative',user_bar_chart_negative,{});
+                    </script>
+                </div><!-- /.card -->
+            </div><!-- /.col -->
+        </div>
+
+
+
+        <div class="col-lg-6" align = "center">
+            <div class="card" >
+                <div id="user_bar_chart_positive" >
+                    <script >
+                        var user_bar_chart_positive = {{user_bar_chart_positive | safe}};
+                        Plotly.plot('user_bar_chart_positive',user_bar_chart_positive,{});
+                    </script>
+                </div><!-- /.card -->
+            </div><!-- /.col -->
+        </div>
+    </div>
+
 </div>
 
 

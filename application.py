@@ -221,8 +221,20 @@ def page_with_filters():
         # writing
         line_chart = page_with_filter.graph_with_filter(df_with_date)
 
+        # df_general_hash_tag = hashtag.hastag_dataframe(df_with_date)
 
-        return render_template("page_with_filters.html", line_graph=line_chart)
+
+
+        df_users_negative = user_sentiments.userdataframe(df_with_date[df_with_date['sentiment'] == 'negative'])
+        user_bar_chart_negative = page_with_filter.create_graph_user_negative(df_users_negative)
+
+        df_users_positive = user_sentiments.userdataframe(df_with_date[df_with_date['sentiment'] == 'positive'])
+        user_bar_chart_positive = page_with_filter.create_graph_user_positive(df_users_positive)
+
+
+        return render_template("page_with_filters.html", line_graph=line_chart,
+                               user_bar_chart_negative=user_bar_chart_negative,
+                               user_bar_chart_positive=user_bar_chart_positive)
 
 
 
