@@ -9,22 +9,10 @@ import live_tweets_graphs
 # from word_cloud import *
 import user_sentiments
 import page_with_filter
-from source import preprocessed_data, load_data, merge_data
+from covid_cases_datapoint import cleaning_data, loading_data, combining_data
 import sentiment_plots
 
 application = Flask(__name__)
-
-""" 
-Data Imports for Covid Cases worldwide
-"""
-
-total_confirmed, total_death, total_recovered, df_pop = load_data()
-
-(grouped_total_confirmed, grouped_total_recovered,
- grouped_total_death, timeseries_final, country_names) = preprocessed_data(total_confirmed, total_death,
-                                                                           total_recovered)
-
-final_df = merge_data(grouped_total_confirmed, grouped_total_recovered, grouped_total_death, df_pop)
 
 df_general_filter = pd.read_csv(
     'https://raw.githubusercontent.com/FabioPalliparambil98/cleaned-covid-dataset/main/general_covid.csv')
@@ -49,8 +37,21 @@ df_vaccination_filter['sentiment'].replace(1, 'positive', inplace=True)
 df_general_filter["tweetcreatedts"] = pd.to_datetime(df_general_filter["tweetcreatedts"], format='%Y/%m/%d %H:%M:%S')
 df_general_filter = df_general_filter.sort_values(by="tweetcreatedts")
 
+""" 
+Data Imports for Covid Cases worldwide
 """
-It displays the Home Pages of the Visualisations.
+
+total_confirmed, total_death, total_recovered, df_pop = loading_data()
+
+(grouped_total_confirmed, grouped_total_recovered,
+ grouped_total_death, timeseries_final, country_names) = cleaning_data(total_confirmed, total_death,
+                                                                       total_recovered)
+
+df_covid_cases_data = combining_data(grouped_total_confirmed, grouped_total_recovered, grouped_total_death, df_pop)
+
+"""
+The is a function used to create visualisation for the home page of the web application.The @application.route is used 
+to get the users input on the web and to run the fuction according to users selection.
 """
 
 
@@ -65,7 +66,7 @@ def homepage():
     days_in_weeks = union_cleaned_df['day_in_week'].unique()
     days_in_weeks.sort()
 
-    # If the request from html is get then run the code.
+    # If the request from html is GET then run the code.
     if request.method == "GET":
 
         # Getting the sentiment on the whole datasets.
@@ -87,10 +88,11 @@ def homepage():
         df_users_vaccination = user_sentiments.userdataframe(df_vaccination_filter)
         df_users_restriction = user_sentiments.userdataframe(df_restriction_filter)
 
+        # Calling a function created in user_sentiments.py to create graph with users and the high no of tweets.
         user_general, user_vaccination, user_restriction = user_sentiments.users_plot(df_users_general,
                                                                                       df_users_vaccination,
                                                                                       df_users_restriction)
-
+        # This is Dictionaries created to pass in the values to index.HTML
         plots = {'line_general': line_general,
                  'line_restriction': line_restriction,
                  'line_vaccination': line_vaccination,
@@ -102,21 +104,23 @@ def homepage():
                  'user_restriction': user_restriction,
                  'table': table}
 
-
-
+        # Creating a dataframe with unique sentiment and their count.
         df_general_sentiment = sentiment_plots.sentiment_dataframe(df_general_filter)
         df_restriction_sentiment = sentiment_plots.sentiment_dataframe(df_restriction_filter)
         df_vaccination_sentiment = sentiment_plots.sentiment_dataframe(df_vaccination_filter)
 
+        # Calling a function in sentiment_plots.py to create the pie graph for sentiment of the people.
         pie_general_sentiment, pie_vaccination_sentiment, pie_restriction_sentiment = sentiment_plots.sentiment_pie(
             df_general_sentiment,
             df_vaccination_sentiment,
             df_restriction_sentiment)
 
+        # This is Dictionaries created to pass in the values to index.HTML
         sentiment_pie = {'pie_general_sentiment': pie_general_sentiment,
-                           'pie_vaccination_sentiment': pie_vaccination_sentiment,
-                           'pie_restriction_sentiment': pie_restriction_sentiment}
+                         'pie_vaccination_sentiment': pie_vaccination_sentiment,
+                         'pie_restriction_sentiment': pie_restriction_sentiment}
 
+        # rendering the index.html template and passing in all the graphs create.
         return render_template("index.html",
                                sentiment_general=sentiment_general,
                                sentiment_vaccination=sentiment_vaccination,
@@ -125,25 +129,29 @@ def homepage():
                                days_in_weeks=days_in_weeks,
                                sentiment_pie=sentiment_pie)
     else:
+        # If the requested method  by index.HTML is POST run the following code.
 
+        # Collect the value entered by the user in the form.
         day = request.form["day"]
 
+        # Select the datasets according to the input of the user.
         df_general_sentiment = df_general_filter_sentiment[df_general_filter_sentiment['day_in_week'] == day]
         df_vaccination_sentiment = df_vaccination_filter_sentiment[
             df_vaccination_filter_sentiment['day_in_week'] == day]
         df_restriction_sentiment = df_restriction_filter_sentiment[
             df_restriction_filter_sentiment['day_in_week'] == day]
 
-        # Sentiment according to the input of the user.
+        # getting the Sentiment according to the filtered dataset according to users input..
         sentiment_general = sentiment_data(df_general_sentiment)
         sentiment_vaccination = sentiment_data(df_vaccination_sentiment)
         sentiment_restriction = sentiment_data(df_restriction_sentiment)
 
+        # Collecting data from hashtag.py and assigning to a variable.
         general_hashtag = hashtag.df_general
         vaccination_hashtag = hashtag.df_vaccination
         restriction_hashtag = hashtag.df_restriction
 
-        #
+        # filtering the datasets according to the input of the user.
         hashtag_general_df = general_hashtag[general_hashtag['day_in_week'] == day]
         hashtag_vaccination_df = vaccination_hashtag[vaccination_hashtag['day_in_week'] == day]
         hashtag_restriction_df = restriction_hashtag[restriction_hashtag['day_in_week'] == day]
@@ -152,28 +160,28 @@ def homepage():
         df_restriction_hash_tag = hashtag.hastag_dataframe(hashtag_restriction_df)
         df_vaccination_hash_tag = hashtag.hastag_dataframe(hashtag_vaccination_df)
 
-        """
-        Wite the restriction and add  day hour to non cleaned data.
-        """
-
         # Plotting all the necessary plots according to users input
         line_general, line_restriction, line_vaccination, all_line_scatters, scatter_circles, pie_general = hashtag.create_plot(
             df_general_hash_tag,
             df_restriction_hash_tag,
             df_vaccination_hash_tag)
 
+        # calling a function to create a table with all the feature using plotly.
         table = create_table(union_cleaned_df[union_cleaned_df['day_in_week'] == day])
 
-        # User Sentiment Graphs
+        # User Sentiment Graphs.
         df_users_general = user_sentiments.userdataframe(df_general_filter[df_general_filter['day_in_week'] == day])
         df_users_vaccination = user_sentiments.userdataframe(
             df_vaccination_filter[df_vaccination_filter['day_in_week'] == day])
         df_users_restriction = user_sentiments.userdataframe(
             df_restriction_filter[df_restriction_filter['day_in_week'] == day])
+
+        # calling a function from the user_sentiments.py to create plots accordin to the filtered data.
         user_general, user_vaccination, user_restriction = user_sentiments.users_plot(df_users_general,
                                                                                       df_users_vaccination,
                                                                                       df_users_restriction)
 
+        # This is Dictionaries created to pass in the values to index.HTML
         plots = {'line_general': line_general,
                  'line_restriction': line_restriction,
                  'line_vaccination': line_vaccination,
@@ -185,8 +193,7 @@ def homepage():
                  'user_restriction': user_restriction,
                  'table': table}
 
-
-
+        # It creates a filtered dataset with feature mentioned by the user.
         df_general_sentiment = sentiment_plots.sentiment_dataframe(
             df_general_filter[df_general_filter['day_in_week'] == day])
         df_restriction_sentiment = sentiment_plots.sentiment_dataframe(
@@ -194,15 +201,18 @@ def homepage():
         df_vaccination_sentiment = sentiment_plots.sentiment_dataframe(
             df_vaccination_filter[df_vaccination_filter['day_in_week'] == day])
 
+        # calling a function from the sentiment_plots.py to create pie graphs according to the filtered data.
         pie_general_sentiment, pie_vaccination_sentiment, pie_restriction_sentiment = sentiment_plots.sentiment_pie(
             df_general_sentiment,
             df_vaccination_sentiment,
             df_restriction_sentiment)
 
+        # This is another Dictionaries created to pass in the values to index.HTML regarding the sentiment_pie graphs.
         sentiment_pie = {'pie_general_sentiment': pie_general_sentiment,
-                           'pie_vaccination_sentiment': pie_vaccination_sentiment,
-                           'pie_restriction_sentiment': pie_restriction_sentiment}
+                         'pie_vaccination_sentiment': pie_vaccination_sentiment,
+                         'pie_restriction_sentiment': pie_restriction_sentiment}
 
+        # rendering the index.html template and passing in all the graphs create.
         return render_template("index.html",
                                sentiment_general=sentiment_general,
                                sentiment_vaccination=sentiment_vaccination,
@@ -211,39 +221,55 @@ def homepage():
                                sentiment_pie=sentiment_pie)
 
 
+"""
+The is a function used to create visualisation for the page_with_filters of the web application.The @application.route 
+is used to get the users input on the web and to run the function according to users selection.
+"""
+
+
 @application.route('/page_with_filters', methods=["GET", "POST"])
 def page_with_filters():
-
+    # combining 3 datasets together.
     union_cleaned_df = pd.concat([df_general_filter,
                                   df_restriction_filter,
                                   df_vaccination_filter
                                   ])
+    # converting a feature to datetime for ease of use.
     union_cleaned_df["tweetcreatedts"] = pd.to_datetime(union_cleaned_df["tweetcreatedts"])
     union_cleaned_df = union_cleaned_df.sort_values(by="tweetcreatedts")
+
+    # Creating another feature with the just the date when the tweet was created.
     union_cleaned_df['date_format'] = [d.date() for d in union_cleaned_df['tweetcreatedts']]
     union_cleaned_df["date_format"] = pd.to_datetime(union_cleaned_df["date_format"])
 
-
-
+    # it is to check whether the method requested by the web page is equal to GET.
     if request.method == "GET":
+
+        # assigning values to use as filtering values.
         start_date = '2021-03-12'
         end_date = '2021-03-20'
 
+        # creating 2 datasets according to filter values and combining together.
         start = union_cleaned_df[union_cleaned_df.date_format == pd.Timestamp(start_date)]
         end = union_cleaned_df[union_cleaned_df.date_format == pd.Timestamp(end_date)]
         df_with_date = pd.concat([start, end])
 
+        # creating a dataframe according to filter values and creating a graphs for negative sentiment.
         df_users_negative = user_sentiments.userdataframe(df_with_date[df_with_date['sentiment'] == 'negative'])
         user_bar_chart_negative = page_with_filter.create_graph_user_negative(df_users_negative)
 
+        # creating a dataframe according to filter values and creating a graphs for positive sentiment.
         df_users_positive = user_sentiments.userdataframe(df_with_date[df_with_date['sentiment'] == 'positive'])
         user_bar_chart_positive = page_with_filter.create_graph_user_positive(df_users_positive)
 
+        #  creating a dataframe according to filter values and creating a pie graphs to identify the sentiment.
         df_single_sentiment = sentiment_plots.sentiment_dataframe(df_with_date)
         pie_sentiment = sentiment_plots.single_sentiment_pie(df_single_sentiment)
 
+        # Create a table according to the filtered dataset.
         table_date = create_table(df_with_date)
 
+        # rendering the page_with_filters.html template and passing in all the graphs created.
         return render_template("page_with_filters.html",
                                user_bar_chart_negative=user_bar_chart_negative,
                                user_bar_chart_positive=user_bar_chart_positive,
@@ -251,25 +277,33 @@ def page_with_filters():
                                table_date=table_date)
 
     else:
+        # If the requested method  by page_with_filters.HTML is POST run the following code.
+
         # getting the values from the HTML form.
         start_date = request.form['start_date']
         end_date = request.form['end_date']
 
+        # creating 2 datasets according to filter values and combining together.
         start = union_cleaned_df[union_cleaned_df.date_format == pd.Timestamp(start_date)]
         end = union_cleaned_df[union_cleaned_df.date_format == pd.Timestamp(end_date)]
         df_with_date = pd.concat([start, end])
 
+        # creating a dataframe according to filter values and creating a graphs for negative sentiment.
         df_users_negative = user_sentiments.userdataframe(df_with_date[df_with_date['sentiment'] == 'negative'])
         user_bar_chart_negative = page_with_filter.create_graph_user_negative(df_users_negative)
 
+        # creating a dataframe according to filter values and creating a graphs for positive sentiment.
         df_users_positive = user_sentiments.userdataframe(df_with_date[df_with_date['sentiment'] == 'positive'])
         user_bar_chart_positive = page_with_filter.create_graph_user_positive(df_users_positive)
 
+        #  creating a dataframe according to filter values and creating a pie graphs to identify the sentiment.
         df_single_sentiment = sentiment_plots.sentiment_dataframe(df_with_date)
         pie_sentiment = sentiment_plots.single_sentiment_pie(df_single_sentiment)
 
+        # Create a table according to the filtered dataset.
         table_date = create_table(df_with_date)
 
+        # rendering the page_with_filters.html template and according to the users input.
         return render_template("page_with_filters.html",
                                user_bar_chart_negative=user_bar_chart_negative,
                                user_bar_chart_positive=user_bar_chart_positive,
@@ -277,66 +311,10 @@ def page_with_filters():
                                table_date=table_date)
 
 
-def weekday_create_plot(df_1):
-    """ Scatter """
-
-    fig = go.Figure()
-
-    fig.add_trace(
-        go.Bar(
-            x=df_1['sentiment'],
-            y=df_1['retweetcount']
-        ))
-
-    day_graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-
-    return day_graphJSON
-
-
-def sentiment_retweets(df_1):
-    """ Scatter """
-
-    fig = go.Figure()
-
-    fig.add_trace(
-        go.Bar(
-            x=df_1['day_in_week'],
-            y=df_1['retweetcount']
-        ))
-
-    day_graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-
-    return day_graphJSON
-
-
-def retweet_count(df_general, df_restriction, df_vaccination):
-    fig = go.Figure()
-
-    fig.add_trace(
-        go.Bar(
-            x=df_general['day_in_week'],
-            y=df_general['retweetcount'],
-            name='Retweeted tweets in COVID-19 General'
-        ))
-
-    fig.add_trace(
-        go.Bar(
-            x=df_restriction['day_in_week'],
-            y=df_restriction['retweetcount'],
-            name='Retweeted tweets in COVID-19 Restriction'
-        ))
-    fig.add_trace(
-        go.Bar(
-            x=df_vaccination['day_in_week'],
-            y=df_vaccination['retweetcount'],
-            name='Retweeted tweets in COVID-19 Vaccination'
-        ))
-    retweet_count_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-    return retweet_count_json
-
-
 """
-It displays the analysis of live tweets.
+This is a function used to create the graphs with live data which is added to the SQL database by the app created to 
+collect live twitter data regarding covid-19.The following link show the Github repo to the data collector app:
+https://github.com/FabioPalliparambil98/live_covid19_tweets
 """
 
 
@@ -347,7 +325,8 @@ def live_tweets():
 
 
 """
-It displays the contactpage.
+This is a function created to retrieve the contact details entered by the user in the web application to contact 
+the developers.
 """
 
 
@@ -369,75 +348,51 @@ def contact_page():
 
 
 """
-It displays the analysis of live tweets.
+This is a function created to display the Covid-19 cases dashboard. It consists os total cases,deaths and recovered and 
+a graph to understand the cases of covid-29 in different locations.
 """
 
 
 @application.route('/covidcases')
 def covidcases():
-    total_all_confirmed = total_confirmed[total_confirmed.columns[-1]].sum()
-    total_all_recovered = total_recovered[total_recovered.columns[-1]].sum()
-    total_all_deaths = total_death[total_death.columns[-1]].sum()
-
-    df = final_df
+    df = df_covid_cases_data
     df.index = df['Country/Region']
-    fig = go.Figure()
-    fig = make_subplots(specs=[[{"secondary_y": True}]])
+    bar_figure = go.Figure()
+    bar_figure = make_subplots(specs=[[{"secondary_y": True}]])
 
-    fig.add_trace(
+    bar_figure.add_trace(
         go.Bar(
             x=df.index,
             y=df["confirmed"],
-            name="# of confirmed cases",
-            marker_color='#39ac39',
-            opacity=1
+            name="No of confirmed cases",
+            marker_color='#087fff'
         ),
-        secondary_y=False
     )
-
-    fig.add_trace(
-        go.Scatter(
-            x=df.index,
-            y=df["cases/million"],
-            mode="lines",
-            name="cases/million",
-            marker_color='#b23434',
-            opacity=0.7
-        ),
-        secondary_y=True
-    )
-
     # Add figure title
-    fig.update_layout(legend=dict(
+    bar_figure.update_layout(legend=dict(
         orientation="h",
         yanchor="bottom",
         y=1.02,
         xanchor="right",
         x=0.93),
-        title={
-            'text': '<span style="font-size: 20px;">Global aggregate cases</span><br><span style="font-size: 10px;">(click and drag)</span>',
-            'y': 0.97,
-            'x': 0.45,
-            'xanchor': 'center',
-            'yanchor': 'top'},
-        paper_bgcolor="#ffffff",
-        plot_bgcolor="#ffffff",
-        width=1500, height=700
+        title="No of Global COVID-19 cases",
+        width=1400, height=650
     )
 
     # Set x-axis title
-    fig.update_xaxes(tickangle=45)
+    bar_figure.update_xaxes(title_text="Countries", tickangle=45)
 
     # Set y-axes titles
-    fig.update_yaxes(title_text="# of confirmed cases",
-                     secondary_y=False, showgrid=False)
-    fig.update_yaxes(title_text="cases/millions", tickangle=45,
-                     secondary_y=True, showgrid=False)
-    plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-    plot_global_cases_per_country = plot_json
+    bar_figure.update_yaxes(title_text="No of confirmed cases",
+                            secondary_y=False, showgrid=False)
+    plot_json = json.dumps(bar_figure, cls=plotly.utils.PlotlyJSONEncoder)
 
-    context = {'plot_global_cases_per_country': plot_global_cases_per_country}
-    return render_template('covidcases.html', context=context, total_all_confirmed=total_all_confirmed,
+    total_all_confirmed = total_confirmed[total_confirmed.columns[-1]].sum()
+    total_all_recovered = total_recovered[total_recovered.columns[-1]].sum()
+    total_all_deaths = total_death[total_death.columns[-1]].sum()
+
+    return render_template('covidcases.html', plot_json=plot_json,
+                           total_all_confirmed=total_all_confirmed,
                            total_all_recovered=total_all_recovered,
                            total_all_deaths=total_all_deaths)
 
@@ -488,7 +443,6 @@ def create_table(df):
         showlegend=False,
         title_text="Covid-19 Data Collected Sample",
     )
-
 
     tableJSON = json.dumps(table, cls=plotly.utils.PlotlyJSONEncoder)
 

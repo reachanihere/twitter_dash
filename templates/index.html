@@ -21,7 +21,8 @@
             <div class="row mb-2">
                 <div class="col-sm-6" >
                     <form  action="/" method="POST">
-                        <select name="day"  method="POST" class="form-select">
+                    <label for="start">Select the a day:</label>
+                        <select id = "start" name="day"  method="POST" class="form-select" >
                              <option selected>Select a Day </option>
                             {% for day in days_in_weeks %}
                               <option value={{ day }}>{{ day }}</option>
