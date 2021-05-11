@@ -53,15 +53,16 @@
     </div>
 
     <div class="row">
-        <div class="card" align = "center"  >
-            <div class="chart" id="plotly-global">
-                <script>
-                    //Parse your Json variable here
-                    var graphs = {{ plot_json | safe }};
-                    Plotly.plot('plotly-global', graphs, {});
-                </script>
-            </div>
-         </div>
+        <div class="col-lg-12" >
+            <div class="card" align = "center"  >
+                <div class="chart" id="plot_json">
+                    <script>
+                        var graphs = {{ plot_json | safe }};
+                        Plotly.plot('plot_json', graphs, {});
+                    </script>
+                </div>
+             </div>
+        </div>
     </div>
 
 </div>
