@@ -391,7 +391,7 @@ def covidcases():
         xanchor="right",
         x=0.93),
         title={
-            'text': '<span style="font-size: 20px;">Global aggregate cases</span><br><span style="font-size: 10px;">(click and drag)</span>',
+            'text': '<span style="font-size: 20px;">Global Covid-19 cases</span><br><span style="font-size: 10px;"></span>',
             'y': 0.97,
             'x': 0.45,
             'xanchor': 'center',
