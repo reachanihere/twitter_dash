@@ -25,6 +25,12 @@ def sentiment_dataframe(df):
     return hashtag_general
 
 
+"""
+Create a Sentiment analysis and display the ration of negative and positive tweets in a pie Chart. 
+The graphs data is returned in the form of json .But this function is for a multiple dataset.
+"""
+
+
 def sentiment_pie(df_general, df_vaccination, df_restriction):
     Pie_general = go.Figure()
     Pie_general.add_trace(go.Pie(labels=df_general['sentiment'],
@@ -56,6 +62,12 @@ def sentiment_pie(df_general, df_vaccination, df_restriction):
     Pie_restriction_JSON = json.dumps(Pie_restriction, cls=plotly.utils.PlotlyJSONEncoder)
 
     return pie_general_JSON, pie_vaccination_JSON, Pie_restriction_JSON
+
+
+"""
+Create a Sentiment analysis and display the ration of negative and positive tweets in a pie Chart. 
+The graphs data is returned in the form of json .But this function is for a single dataset.
+"""
 
 
 def single_sentiment_pie(df_general):

@@ -4,13 +4,14 @@ import json
 import plotly
 import plotly.graph_objs as go
 
-
+"""
+Create a Scatter graph with usernames and counts.
+Then a json data is returned at the end of the function
+"""
 
 
 def create_graph_user_negative(df):
-    '''
-        Plot the bar Chart
-        '''
+
     bar_chart = go.Figure()
 
     bar_chart.add_trace(go.Scatter(
@@ -25,7 +26,6 @@ def create_graph_user_negative(df):
     bar_chart.update_xaxes(tickangle=45)
     bar_chart.update_xaxes(title_text="User names")
 
-
     # Set y-axes titles
     bar_chart.update_yaxes(title_text="Number of Tweets tweeted")
 
@@ -33,10 +33,15 @@ def create_graph_user_negative(df):
 
     return bar_chart_JSON
 
+
+"""
+Create a Scatter graph with usernames and counts.
+Then a json data is returned at the end of the function
+"""
+
+
 def create_graph_user_positive(df):
-    '''
-            Plot the bar Chart
-            '''
+
     bar_chart = go.Figure()
 
     bar_chart.add_trace(go.Scatter(
