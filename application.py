@@ -357,35 +357,57 @@ a graph to understand the cases of covid-29 in different locations.
 def covidcases():
     df = df_covid_cases_data
     df.index = df['Country/Region']
-    bar_figure = go.Figure()
-    bar_figure = make_subplots(specs=[[{"secondary_y": True}]])
+    fig = go.Figure()
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
 
-    bar_figure.add_trace(
+    fig.add_trace(
         go.Bar(
             x=df.index,
             y=df["confirmed"],
             name="No of confirmed cases",
-            marker_color='#087fff'
+            marker_color='#087fff',
+            opacity=1
         ),
+        secondary_y=False
     )
+
+    fig.add_trace(
+        go.Scatter(
+            x=df.index,
+            y=df["cases/million"],
+            mode="lines",
+            name="cases/million",
+            marker_color='#b5ff08',
+            opacity=0.7
+        ),
+        secondary_y=True
+    )
+
     # Add figure title
-    bar_figure.update_layout(legend=dict(
+    fig.update_layout(legend=dict(
         orientation="h",
         yanchor="bottom",
         y=1.02,
         xanchor="right",
         x=0.93),
-        title="No of Global COVID-19 cases",
-        width=1400, height=650
+        title={
+            'text': '<span style="font-size: 20px;">Global aggregate cases</span><br><span style="font-size: 10px;">(click and drag)</span>',
+            'y': 0.97,
+            'x': 0.45,
+            'xanchor': 'center',
+            'yanchor': 'top'}
     )
 
     # Set x-axis title
-    bar_figure.update_xaxes(title_text="Countries", tickangle=45)
+    fig.update_xaxes(tickangle=45)
 
     # Set y-axes titles
-    bar_figure.update_yaxes(title_text="No of confirmed cases",
-                            secondary_y=False, showgrid=False)
-    plot_json = json.dumps(bar_figure, cls=plotly.utils.PlotlyJSONEncoder)
+    fig.update_yaxes(title_text="No of confirmed cases",
+                     secondary_y=False, showgrid=False)
+    fig.update_yaxes(title_text="cases/millions", tickangle=45,
+                     secondary_y=True, showgrid=False)
+
+    plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     total_all_confirmed = total_confirmed[total_confirmed.columns[-1]].sum()
     total_all_recovered = total_recovered[total_recovered.columns[-1]].sum()
@@ -395,6 +417,7 @@ def covidcases():
                            total_all_confirmed=total_all_confirmed,
                            total_all_recovered=total_all_recovered,
                            total_all_deaths=total_all_deaths)
+    return plot_json
 
 
 """
@@ -419,6 +442,7 @@ create_table
 
 def create_table(df):
     df = df.head(20)
+
 
     table = go.Figure([go.Table(
         header=dict(

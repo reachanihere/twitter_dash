@@ -1,8 +1,7 @@
 import pandas as pd
 
 """
-Loading the data from a repo created by Johns Hopkins University, 
-the link to the Github repo : https://github.com/CSSEGISandData/COVID-19
+Loading the data from a repo created by Johns Hopkins University.
 """
 
 def loading_data():
